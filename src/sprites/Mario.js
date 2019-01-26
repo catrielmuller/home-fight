@@ -16,10 +16,10 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     this.body.maxVelocity.x = 200;
     this.body.maxVelocity.y = 500;
     this.animSuffix = '';
-    this.small();
+    // this.small();
 
     // this.animSuffix = 'Super';
-    // this.large();
+    this.large();
 
     this.wasHurt = -1;
     this.flashToggle = false;
@@ -49,8 +49,8 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       this
     );
 
-    // this.animSuffix = 'Fire';
-    // this.scene.sound.playAudioSprite('sfx', 'smb_powerup');
+    this.animSuffix = 'Fire';
+    //this.scene.sound.playAudioSprite('sfx', 'smb_powerup');
   }
 
   update(keys, time, delta) {
@@ -66,8 +66,6 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       // this.alive = true;
       // this.scene.music.seek = 0;
       // this.scene.music.play();
-    } else if (this.y > 240 && this.alive) {
-      this.die();
     }
 
     // Don't do updates while entering the pipe or being dead
@@ -281,8 +279,8 @@ export default class Mario extends Phaser.GameObjects.Sprite {
   }
 
   large() {
-    this.body.setSize(10, 22);
-    this.body.offset.set(3, 20);
+    this.body.setSize(10, 14);
+    this.body.offset.set(3, 15);
   }
 
   die() {
@@ -292,6 +290,12 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     this.body.setAcceleration(0);
     this.body.setVelocity(0, -300);
     this.alive = false;
+  }
+
+  losePoints() {
+    this.scene.music.pause();
+    this.play('death');
+    this.scene.sound.playAudioSprite('sfx', 'smb_mariodie');
   }
 
   collideWithMap(sprite, tile) {

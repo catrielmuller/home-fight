@@ -136,6 +136,7 @@ class GameScene extends Phaser.Scene {
       y: this.sys.game.config.height - (780)
     });
 
+    //adds player name
     this.playerName = this.add.bitmapText(
       this.mario.x,
       this.mario.y,
@@ -180,6 +181,23 @@ class GameScene extends Phaser.Scene {
       }
     });
 
+    socket.on('hitConfirmed', hitInfo => {
+      console.log(hitInfo.source + " pwneo a " + hitInfo.target )
+      //TODO: avisar de alguna manera el cambio
+      //const scorecard = this.add.bitmapText(
+      //  this.mario.x,
+      //  this.mario.y,
+      //  'font',
+      //  hitInfo.source + " pwneo a " + hitInfo.target,
+      //  8
+      //);
+      
+    });
+
+    socket.on('updateScore', updatedScore => {
+      //TODO: Actualizar puntaje
+      console.log(updatedScore)
+    });
       //Object.values(players).forEach(this.createEnemyPlayer);
       //socket.off('currentPlayers');
 
@@ -202,6 +220,8 @@ class GameScene extends Phaser.Scene {
       x,
       y,
     });
+
+    //adds other players names
     this.players[id].playerName = this.add.bitmapText(
       x,
       y,
