@@ -226,10 +226,10 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       }
     }
     if (this.body.velocity.y < 0 || this.body.blocked.down) {
-      this.body.setVelocityY(-200);
+      this.body.setVelocityY(-400);
     }
     if (!this.jumping) {
-      this.jumpTimer = 300;
+      this.jumpTimer = 400;
     }
     this.jumping = true;
   }
