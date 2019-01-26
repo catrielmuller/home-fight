@@ -42,6 +42,10 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       },
       this
     );
+
+    this.animSuffix = 'Fire';
+    this.scene.sound.playAudioSprite('sfx', 'smb_powerup');
+
   }
 
   update(keys, time, delta) {
@@ -115,6 +119,7 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     };
 
     if (input.fire && this.animSuffix === 'Fire' && this.fireCoolDown < 0) {
+      
       let fireball = this.scene.fireballs.get(this);
       if (fireball) {
         fireball.fire(this.x, this.y, this.flipX);

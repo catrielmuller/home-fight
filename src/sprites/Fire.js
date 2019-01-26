@@ -1,3 +1,5 @@
+import socket from '../helpers/socket';
+
 export default class Fire extends Phaser.GameObjects.Sprite {
     constructor(scene) {
         super(scene);
@@ -22,16 +24,36 @@ export default class Fire extends Phaser.GameObjects.Sprite {
                 this.setVisible(false);
             }
         }, this);
+
+        socket.on('broadcastProjectile', projectileRecieved => {
+            console.log('Projectile incoming!', projectileRecieved);
+            this.draw(projectileRecieved)
+            //Object.values(players).forEach(this.createEnemyPlayer);
+            //socket.off('currentPlayers');
+          });
+      
     }
 
     fire(x, y, left) {
+        const projectileOwner = socket.id
+        console.log("sending projectile ", x, y, left, projectileOwner);
+        socket.emit('sendProjectile', {
+            x,
+            y,
+            left,
+            projectileOwner
+          });
+    }
+
+    draw(projectileRecieved){
+
         this.setActive(true);
         this.setVisible(true);
         // this.scene.add.existing(this);
         this.body.allowGravity = true;
 
-        this.setPosition(x, y);
-        this.body.velocity.x = 400 * (left ? -1 : 1);
+        this.setPosition(projectileRecieved.x, projectileRecieved.y);
+        this.body.velocity.x = 400 * (projectileRecieved.left ? -1 : 1);
         this.play('fireFly');
         this.scene.sound.playAudioSprite('sfx', 'smb_fireball');
 
