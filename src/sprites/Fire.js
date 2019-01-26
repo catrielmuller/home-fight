@@ -23,26 +23,7 @@ export default class Fire extends Phaser.GameObjects.Sprite {
                 this.setActive(false);
                 this.setVisible(false);
             }
-        }, this);
-
-        socket.on('broadcastProjectile', projectileRecieved => {
-            console.log('Projectile incoming!', projectileRecieved);
-            this.draw(projectileRecieved)
-            //Object.values(players).forEach(this.createEnemyPlayer);
-            //socket.off('currentPlayers');
-          });
-      
-    }
-
-    fire(x, y, left) {
-        const projectileOwner = socket.id
-        console.log("sending projectile ", x, y, left, projectileOwner);
-        socket.emit('sendProjectile', {
-            x,
-            y,
-            left,
-            projectileOwner
-          });
+        }, this);      
     }
 
     draw(projectileRecieved){

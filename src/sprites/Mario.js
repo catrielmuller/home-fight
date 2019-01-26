@@ -118,13 +118,16 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       fire: keys.fire.isDown
     };
 
-    if (input.fire && this.animSuffix === 'Fire' && this.fireCoolDown < 0) {
-      
-      let fireball = this.scene.fireballs.get(this);
-      if (fireball) {
-        fireball.fire(this.x, this.y, this.flipX);
+    if (input.fire && this.animSuffix === 'Fire' && this.fireCoolDown < 0) {      
+        const projectileOwner = socket.id
+        console.log("sending projectile ", this.x, this.y, this.flipX, projectileOwner);
+        socket.emit('sendProjectile', {
+          x : this.x,
+          y : this.y,
+          left : this.flipX,
+          projectileOwner
+          });
         this.fireCoolDown = 300;
-      }
     }
 
     // this.angle++

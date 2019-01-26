@@ -164,6 +164,17 @@ class GameScene extends Phaser.Scene {
 
     this.cameras.main.roundPixels = true;
 
+    socket.on('broadcastProjectile', projectileRecieved => {
+      console.log('Projectile incoming!', projectileRecieved);
+      let fireball = this.mario.scene.fireballs.get(this);
+      if (fireball) {
+        fireball.draw(projectileRecieved);
+      };
+    });
+    
+      //Object.values(players).forEach(this.createEnemyPlayer);
+      //socket.off('currentPlayers');
+
     this.fireballs = this.add.group({
       classType: Fire,
       maxSize: 10,
