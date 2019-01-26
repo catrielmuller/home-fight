@@ -406,7 +406,6 @@ class GameScene extends Phaser.Scene {
   parseObjectLayers() {
     return;
 
-
     // The map has an object layer with 'modifiers' that do 'stuff', see below
     this.map.getObjectLayer('modifiers').objects.forEach(modifier => {
       let tile, properties, type;
@@ -475,8 +474,6 @@ class GameScene extends Phaser.Scene {
       textObject: this.add.bitmapText(5 * 8, 16, 'font', '000000', 8)
     };
     this.score.textObject.setScrollFactor(0, 0);
-
-    
   }
 
   cleanUp() {

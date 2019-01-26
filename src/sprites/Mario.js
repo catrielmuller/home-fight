@@ -5,6 +5,13 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     super(config.scene, config.x, config.y, config.key);
     config.scene.physics.world.enable(this);
     config.scene.add.existing(this);
+
+    config.scene.physics.add.collider(
+      config.scene.groundLayer,
+      this,
+      this.collideWithMap.bind(this)
+    );
+
     this.acceleration = 600;
     this.body.maxVelocity.x = 200;
     this.body.maxVelocity.y = 500;
@@ -14,7 +21,6 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     // this.animSuffix = 'Super';
     // this.large();
 
-    this.bending = false;
     this.wasHurt = -1;
     this.flashToggle = false;
     this.star = {
@@ -66,22 +72,11 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     }
 
     // Don't do updates while entering the pipe or being dead
-    if (this.enteringPipe || !this.alive) {
+    if (!this.alive) {
       return;
     }
 
     this.fireCoolDown -= delta;
-
-    // Just run callbacks when hitting something from below or trying to enter it
-    if (this.body.velocity.y < 0 || this.bending) {
-      this.scene.physics.world.collide(
-        this,
-        this.scene.groundLayer,
-        this.scene.tileCollision
-      );
-    } else {
-      this.scene.physics.world.collide(this, this.scene.groundLayer);
-    }
 
     if (this.wasHurt > 0) {
       this.wasHurt -= delta;
@@ -135,8 +130,6 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     if (this.body.velocity.y > 0) {
       this.hasFalled = true;
     }
-
-    this.bending = false;
 
     this.jumpTimer -= delta;
 
@@ -209,10 +202,6 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       !this.scene.physics.world.isPaused
     ) {
       this.anims.play(anim);
-    }
-
-    if (input.down && this.body.velocity.x < 100) {
-      this.bending = true;
     }
 
     this.physicsCheck = true;
@@ -305,6 +294,14 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     this.body.setAcceleration(0);
     this.body.setVelocity(0, -300);
     this.alive = false;
+  }
+
+  collideWithMap(sprite, tile) {
+    console.log({ sprite, tile });
+    // Just run callbacks when hitting something from below or trying to enter it
+    // if (this.body.velocity.y < 0) {
+    this.scene.tileCollision(sprite, tile);
+    // }
   }
 
   enterPipe(id, dir, init = true) {
