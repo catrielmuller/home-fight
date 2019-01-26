@@ -9,7 +9,8 @@
         "sourceType": "module"
     },
     "globals": {
-      "Phaser": true
+      "Phaser": true,
+      "SERVER_URL": true
     },
     "rules": {
         "indent": [
