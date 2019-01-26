@@ -538,33 +538,6 @@ class GameScene extends Phaser.Scene {
   }
 
   parseObjectLayers() {
-    // The map has one object layer with enemies as stamped tiles,
-    // each tile has properties containing info on what enemy it represents.
-    this.map.getObjectLayer('enemies').objects.forEach(enemy => {
-      let enemyObject;
-      switch (this.tileset.tileProperties[enemy.gid - 1].name) {
-      case 'goomba':
-        enemyObject = new Goomba({
-          scene: this,
-          key: 'sprites16',
-          x: enemy.x,
-          y: enemy.y
-        });
-        break;
-      case 'turtle':
-        enemyObject = new Turtle({
-          scene: this,
-          key: 'mario-sprites',
-          x: enemy.x,
-          y: enemy.y
-        });
-        break;
-      default:
-        console.error('Unknown:', this.tileset.tileProperties[enemy.gid - 1]); // eslint-disable-line no-console
-        break;
-      }
-      this.enemyGroup.add(enemyObject);
-    });
 
     // The map has an object layer with 'modifiers' that do 'stuff', see below
     this.map.getObjectLayer('modifiers').objects.forEach(modifier => {
