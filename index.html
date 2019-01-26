@@ -3,7 +3,7 @@
 
 <head>	
     <meta charset="UTF-8">
-    <title>Phaser3 - ES6 - Webpack</title>
+    <title>Home Fight</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
@@ -22,11 +22,19 @@
           -ms-interpolation-mode: nearest-neighbor;    /* IE (non standard naming) */
           image-rendering: pixelated;                  /* Chrome 41 */
         }
+        #content {
+            display: block;
+            width: 100%;
+            text-align: center
+        }
+        #content canvas {
+            min-width: 100vw;
+            min-height: 100vh;
+        }
     </style>
 </head>
 
 <body style="background-color: black;">
-    <div id="content" style="display: block; width: 100%; text-align: center"></div>
-
+    <div id="content"></div>
 <script type="text/javascript" src="./dev/vendor.js"></script><script type="text/javascript" src="./dev/app.js"></script></body>
 </html>
