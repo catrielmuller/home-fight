@@ -10,7 +10,6 @@ import socket from '../helpers/socket';
 import EnemyPlayer from '../sprites/EnemyPlayer';
 
 class GameScene extends Phaser.Scene {
-  
   constructor() {
     super({
       key: 'GameScene'
@@ -64,6 +63,8 @@ class GameScene extends Phaser.Scene {
 
     // This group contains all enemies for collision and calling update-methods
     this.enemyGroup = this.add.group();
+
+    this.enemyPlayerGroup = this.add.group();
 
     // A group powerUps to update
     this.powerUps = this.add.group();
@@ -154,6 +155,7 @@ class GameScene extends Phaser.Scene {
     socket.on('deletePlayer', id => {
       console.log('Player disconected', id);
       if (this.players[id]) {
+        this.players[id].playerName.destroy();
         this.players[id].destroy();
         delete this.players[id];
       }
@@ -162,8 +164,8 @@ class GameScene extends Phaser.Scene {
     socket.on('playerMove', player => {
       const { id, x, y, r } = player;
       if (this.players[id]) {
-        this.players[id].move({ x, y, r });
-        this.players[id].playerName.setPosition(x,y,1);
+        this.players[id].move(player);
+        this.players[id].playerName.setPosition(x, y, 1);
       }
     });
 
@@ -182,7 +184,7 @@ class GameScene extends Phaser.Scene {
     });
 
     socket.on('hitConfirmed', hitInfo => {
-      console.log(hitInfo.source + " pwneo a " + hitInfo.target )
+      console.log(hitInfo.source + ' pwneo a ' + hitInfo.target);
       //TODO: avisar de alguna manera el cambio
       //const scorecard = this.add.bitmapText(
       //  this.mario.x,
@@ -191,15 +193,14 @@ class GameScene extends Phaser.Scene {
       //  hitInfo.source + " pwneo a " + hitInfo.target,
       //  8
       //);
-      
     });
 
     socket.on('updateScore', updatedScore => {
       //TODO: Actualizar puntaje
-      console.log(updatedScore)
+      console.log(updatedScore);
     });
-      //Object.values(players).forEach(this.createEnemyPlayer);
-      //socket.off('currentPlayers');
+    //Object.values(players).forEach(this.createEnemyPlayer);
+    //socket.off('currentPlayers');
 
     this.fireballs = this.add.group({
       classType: Fire,
@@ -218,17 +219,12 @@ class GameScene extends Phaser.Scene {
       scene: this,
       key: 'mario',
       x,
-      y,
+      y
     });
 
     //adds other players names
-    this.players[id].playerName = this.add.bitmapText(
-      x,
-      y,
-      'font',
-      id,
-      8
-    );
+    this.players[id].playerName = this.add.bitmapText(x, y, 'font', id, 8);
+    this.enemyPlayerGroup.add(this.players[id]);
   }
 
   update(time, delta) {
@@ -249,18 +245,16 @@ class GameScene extends Phaser.Scene {
       return;
     }
 
-    if (this.mario.x > this.finishLine.x && this.finishLine.active) {
-      this.removeFlag();
-      this.physics.world.pause();
-      return;
-    }
-
     // Run the update method of Mario
     this.mario.update(this.keys, time, delta);
-    this.playerName.setPosition(this.mario.x, this.mario.y,1);
-    
+    this.playerName.setPosition(this.mario.x, this.mario.y, 1);
+
     // Run the update method of all enemies
     this.enemyGroup.children.entries.forEach(sprite => {
+      sprite.update(time, delta);
+    });
+
+    this.enemyPlayerGroup.children.entries.forEach(sprite => {
       sprite.update(time, delta);
     });
 
@@ -271,18 +265,6 @@ class GameScene extends Phaser.Scene {
   }
 
   tileCollision(sprite, tile) {
-    if (sprite.type === 'turtle') {
-      if (tile.y > Math.round(sprite.y / 16)) {
-        // Turtles ignore the ground
-        return;
-      }
-    } else if (sprite.type === 'mario') {
-      // Mario is bending on a pipe that leads somewhere:
-      if (sprite.bending && tile.properties.pipe && tile.properties.dest) {
-        sprite.enterPipe(tile.properties.dest, tile.rotation);
-      }
-    }
-
     // If it's Mario and the body isn't blocked up it can't hit question marks or break bricks
     // Otherwise Mario will break bricks he touch from the side while moving up.
     if (sprite.type === 'mario' && !sprite.body.blocked.up) {
@@ -376,68 +358,6 @@ class GameScene extends Phaser.Scene {
     this.score.textObject.setText(('' + this.score.pts).padStart(6, '0'));
   }
 
-  removeFlag(step = 0) {
-    switch (step) {
-    case 0:
-      this.music.pause();
-      this.sound.playAudioSprite('sfx', 'smb_flagpole');
-      this.mario.play('mario/climb' + this.mario.animSuffix);
-      this.mario.x = this.finishLine.x - 1;
-      this.tweens.add({
-        targets: this.finishLine.flag,
-        y: 240 - 6 * 8,
-        duration: 1500,
-        onComplete: () => this.removeFlag(1)
-      });
-      this.tweens.add({
-        targets: this.mario,
-        y: 240 - 3 * 16,
-        duration: 1000,
-        onComplete: () => {
-          this.mario.flipX = true;
-          this.mario.x += 11;
-        }
-      });
-      break;
-    case 1:
-      let sound = this.sound.addAudioSprite('sfx');
-      sound.on('ended', sound => {
-        /* this.mario.x = 48;
-                    this.mario.y = -32;
-                    this.mario.body.setVelocity(0);
-                    this.mario.alpha = 1;
-                    this.music.rate = 1;
-                    this.music.seek = 0;
-                    this.music.resume();
-                    this.levelTimer.hurry = false;
-                    this.levelTimer.time = 150 * 1000;
-                    this.levelTimer.displayedTime = 255;
-                    this.physics.world.resume(); */
-        sound.destroy();
-        this.scene.start('TitleScene');
-      });
-      sound.play('smb_stage_clear');
-
-      this.mario.play('run' + this.mario.animSuffix);
-
-      this.mario.flipX = false;
-      this.tweens.add({
-        targets: this.mario,
-        x: this.finishLine.x + 6 * 16,
-        duration: 1000,
-        onComplete: () => this.removeFlag(2)
-      });
-      break;
-    case 2:
-      this.tweens.add({
-        targets: this.mario,
-        alpha: 0,
-        duration: 500
-      });
-      break;
-    }
-  }
-
   parseObjectLayers() {
     return;
 
@@ -496,13 +416,7 @@ class GameScene extends Phaser.Scene {
   }
 
   createHUD() {
-    const hud = this.add.bitmapText(
-      5 * 8,
-      8,
-      'font',
-      'MARIO',
-      8
-    );
+    const hud = this.add.bitmapText(5 * 8, 8, 'font', 'MARIO', 8);
     hud.setScrollFactor(0, 0);
     this.score = {
       pts: 0,

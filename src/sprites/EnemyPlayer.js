@@ -6,7 +6,7 @@ export default class EnemyPlayer extends Phaser.GameObjects.Sprite {
     config.scene.physics.world.enable(this);
     config.scene.add.existing(this);
     this.alive = true;
-    this.anims.play('standSuper');
+    this.anim = 'standSuper';
 
     // config.scene.physics.world.enable(this);
     config.scene.add.existing(this);
@@ -25,12 +25,26 @@ export default class EnemyPlayer extends Phaser.GameObjects.Sprite {
     this.body.setAllowGravity(false);
 
     // Standard sprite is 16x16 pixels with a smaller body
-    this.body.setSize(12, 16);
+    this.body.setSize(12, 12);
     this.body.offset.set(10, 12);
   }
 
-  move({ x, y, r }) {
-    this.body.reset(x, y);
+  move({ anim, x, y, r, velx, vely, accx, accy }) {
+    this.body
+      .setVelocity(velx, vely)
+      .setAcceleration(accx, accy)
+      .reset(x, y);
+    this.anim = anim;
     this.flipX = r;
+  }
+
+  update(time, delta) {
+    const anim = this.anim;
+    if (
+      anim &&
+      (!this.anims.currentAnim || this.anims.currentAnim.key != anim)
+    ) {
+      this.anims.play(anim);
+    }
   }
 }

@@ -84,24 +84,6 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       }
     }
 
-    if (this.star.active) {
-      if (this.star.timer < 0) {
-        this.star.active = false;
-        this.tint = 0xffffff;
-      } else {
-        this.star.timer -= delta;
-        this.star.step = this.star.step === 5 ? 0 : this.star.step + 1;
-        this.tint = [
-          0xffffff,
-          0xff0000,
-          0xffffff,
-          0x00ff00,
-          0xffffff,
-          0x0000ff
-        ][this.star.step];
-      }
-    }
-
     let input = {
       left: keys.left.isDown,
       right: keys.right.isDown,
@@ -124,7 +106,7 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     // this.angle++
     //  console.log(this.body.velocity.y);
     if (this.body.velocity.y > 0) {
-      this.hasFalled = true;
+      this.falling = true;
     }
 
     this.jumpTimer -= delta;
@@ -203,6 +185,11 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     this.physicsCheck = true;
     const { x, y, flipX } = this;
     socket.emit('move', {
+      anim: anim,
+      velx: this.body.velocity.x,
+      vely: this.body.velocity.y,
+      accx: this.body.acceleration.x,
+      accy: this.body.acceleration.y,
       x,
       y,
       r: flipX
@@ -300,40 +287,6 @@ export default class Mario extends Phaser.GameObjects.Sprite {
 
   collideWithMap(sprite, tile) {
     // Just run callbacks when hitting something from below or trying to enter it
-    // if (this.body.velocity.y < 0) {
     this.scene.tileCollision(sprite, tile);
-    // }
-  }
-
-  enterPipe(id, dir, init = true) {
-    if (init) {
-      if (this.animSuffix === '') {
-        this.play('stand');
-      } else {
-        this.play('bend' + this.animSuffix);
-      }
-      this.scene.sound.playAudioSprite('sfx', 'smb_pipe');
-
-      this.enteringPipe = true;
-      this.body.setVelocity(0);
-      this.body.setAcceleration(0);
-      this.setDepth(-100);
-      this.scene.tweens.add({
-        targets: this,
-        y: this.y + 40,
-        duration: 800,
-        onComplete: function() {
-          console.log(this.targets, id, dir);
-          console.log(id);
-          console.log(dir);
-          this.targets[0].enterPipe(id, dir, false);
-        }
-      });
-    } else {
-      this.setDepth(1);
-      this.enteringPipe = false;
-      this.x = this.scene.destinations[id].x;
-      this.y = this.scene.destinations[id].top ? -100 : 100;
-    }
   }
 }
