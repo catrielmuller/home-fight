@@ -28,18 +28,6 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    // This scene is either called to run in attract mode in the background of the title screen
-    // or for actual gameplay. Attract mode is based on a JSON-recording.
-    this.attractMode = null;
-
-    // Places to warp to (from pipes). These coordinates is used also to define current room (see below)
-    this.destinations = {};
-
-    // Array of rooms to keep bounds within to avoid the need of multiple tilemaps per level.
-    // It might be a singe screen room like when going down a pipe or a sidescrolling level.
-    // It's defined as objects in Tiled.
-    this.rooms = [];
-
     // Running in 8-bit mode (16-bit mode is avaliable for the tiles, but I haven't done any work on sprites etc)
     this.eightBit = true;
 
@@ -133,60 +121,8 @@ class GameScene extends Phaser.Scene {
       active: false
     };
     this.finishLine.flag.play('flag');
-
-    // Touch controls is really just a quick hack to try out performance on mobiles,
-    // It's not itended as a suggestion on how to do it in a real game.
-    let jumpButton = this.add.sprite(350, 180);
-    jumpButton.play('button');
-    let dpad = this.add.sprite(20, 170);
-    dpad.play('dpad');
-    this.touchControls = {
-      dpad: dpad,
-      abutton: jumpButton,
-      left: false,
-      right: false,
-      down: false,
-      jump: false,
-      visible: false
-    };
-    jumpButton.setScrollFactor(0, 0);
-    jumpButton.alpha = 0;
-    jumpButton.setInteractive();
-    jumpButton.on('pointerdown', pointer => {
-      this.touchControls.jump = true;
-    });
-    jumpButton.on('pointerup', pointer => {
-      this.touchControls.jump = false;
-    });
-    dpad.setScrollFactor(0, 0);
-    dpad.alpha = 0;
-    dpad.setInteractive();
-    dpad.on('pointerdown', pointer => {
-      let x = dpad.x + dpad.width - pointer.x;
-      let y = dpad.y + dpad.height - pointer.y;
-      console.log(x, y);
-      if (y > 0 || Math.abs(x) > -y) {
-        if (x > 0) {
-          console.log('going left');
-          this.touchControls.left = true;
-        } else {
-          console.log('going right');
-          this.touchControls.right = true;
-        }
-      } else {
-        this.touchControls.down = true;
-      }
-    });
-    dpad.on('pointerup', pointer => {
-      this.touchControls.left = false;
-      this.touchControls.right = false;
-      this.touchControls.down = false;
-    });
-    window.toggleTouch = this.toggleTouch.bind(this);
-
     // Mute music
     this.music.volume = 0;
-
 
     // If the game ended while physics was disabled
     this.physics.world.resume();
@@ -206,7 +142,7 @@ class GameScene extends Phaser.Scene {
       Object.values(players).forEach(this.createEnemyPlayer);
       socket.off('currentPlayers');
     });
-    socket.on('deletePlayer', (id) => {
+    socket.on('deletePlayer', id => {
       console.log('Player disconected', id);
       if (this.players[id]) {
         this.players[id].destroy();
@@ -214,7 +150,7 @@ class GameScene extends Phaser.Scene {
       }
     });
     socket.on('newPlayer', this.createEnemyPlayer);
-    socket.on('playerMove', (player) => {
+    socket.on('playerMove', player => {
       const { id, x, y, r } = player;
       if (this.players[id]) {
         this.players[id].move({ x, y, r });
@@ -222,9 +158,6 @@ class GameScene extends Phaser.Scene {
     });
 
     socket.emit('getPlayers');
-
-    // Set bounds for current room
-    this.mario.setRoomBounds(this.rooms);
 
     // The camera should follow Mario
     this.cameras.main.startFollow(this.mario);
@@ -486,58 +419,9 @@ class GameScene extends Phaser.Scene {
     }
   }
 
-  toggleTouch() {
-    this.touchControls.visible = !this.touchControls.visible;
-    if (this.touchControls.visible) {
-      this.touchControls.dpad.alpha = 0;
-      this.touchControls.abutton.alpha = 0;
-    } else {
-      this.touchControls.dpad.alpha = 0.5;
-      this.touchControls.abutton.alpha = 0.5;
-    }
-  }
-
-  record(delta) {
-    let update = false;
-    let keys = {
-      jump: this.keys.jump.isDown || this.keys.jump2.isDown,
-      left: this.keys.left.isDown,
-      right: this.keys.right.isDown,
-      down: this.keys.down.isDown,
-      fire: this.keys.fire.isDown
-    };
-    if (typeof recording === 'undefined') {
-      console.log('DEFINE');
-      window.recording = [];
-      window.time = 0;
-      this.recordedKeys = {};
-      update = true;
-    } else {
-      update = time - recording[recording.length - 1].time > 200; // update at least 5 times per second
-    }
-    time += delta;
-    if (!update) {
-      // update if keys changed
-      ['jump', 'left', 'right', 'down', 'fire'].forEach(dir => {
-        if (keys[dir] !== this.recordedKeys[dir]) {
-          update = true;
-        }
-      });
-    }
-    if (update) {
-      recording.push({
-        time,
-        keys,
-        x: this.mario.x,
-        y: this.mario.y,
-        vx: this.mario.body.velocity.x,
-        vy: this.mario.body.velocity.y
-      });
-    }
-    this.recordedKeys = keys;
-  }
-
   parseObjectLayers() {
+    return;
+
 
     // The map has an object layer with 'modifiers' that do 'stuff', see below
     this.map.getObjectLayer('modifiers').objects.forEach(modifier => {
