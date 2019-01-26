@@ -16,10 +16,10 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     this.body.maxVelocity.x = 200;
     this.body.maxVelocity.y = 500;
     this.animSuffix = '';
-    this.small();
+    // this.small();
 
     // this.animSuffix = 'Super';
-    // this.large();
+    this.large();
 
     this.wasHurt = -1;
     this.flashToggle = false;
@@ -279,8 +279,8 @@ export default class Mario extends Phaser.GameObjects.Sprite {
   }
 
   large() {
-    this.body.setSize(10, 22);
-    this.body.offset.set(3, 20);
+    this.body.setSize(10, 14);
+    this.body.offset.set(3, 15);
   }
 
   die() {
