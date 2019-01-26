@@ -11,7 +11,6 @@ export default class SMBTileSprite extends Phaser.GameObjects.Sprite {
   }
 
   update() {
-    // this.scene.physics.world.collide(this, this.scene.enemyGroup, ()=>{console.log('COLLIDED!')});
     this.scene.enemyGroup.children.entries.forEach(enemy => {
       this.scene.physics.world.overlap(this, enemy, () => {
         enemy.starKilled();

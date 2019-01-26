@@ -49,9 +49,8 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       this
     );
 
-    this.animSuffix = 'Fire';
-    this.scene.sound.playAudioSprite('sfx', 'smb_powerup');
-
+    // this.animSuffix = 'Fire';
+    // this.scene.sound.playAudioSprite('sfx', 'smb_powerup');
   }
 
   update(keys, time, delta) {
@@ -113,16 +112,15 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       fire: keys.fire.isDown
     };
 
-    if (input.fire && this.animSuffix === 'Fire' && this.fireCoolDown < 0) {      
-        const projectileOwner = socket.id
-        console.log("sending projectile ", this.x, this.y, this.flipX, projectileOwner);
-        socket.emit('sendProjectile', {
-          x : this.x,
-          y : this.y,
-          left : this.flipX,
-          projectileOwner
-          });
-        this.fireCoolDown = 300;
+    if (input.fire && this.fireCoolDown < 0) {
+      const projectileOwner = socket.id;
+      socket.emit('sendProjectile', {
+        x: this.x,
+        y: this.y,
+        left: this.flipX,
+        projectileOwner
+      });
+      this.fireCoolDown = 300;
     }
 
     // this.angle++
@@ -279,12 +277,12 @@ export default class Mario extends Phaser.GameObjects.Sprite {
 
   small() {
     this.body.setSize(10, 10);
-    this.body.offset.set(3, 0);
+    this.body.offset.set(3, 6);
   }
 
   large() {
     this.body.setSize(10, 22);
-    this.body.offset.set(3, 0);
+    this.body.offset.set(3, 20);
   }
 
   die() {
@@ -297,7 +295,6 @@ export default class Mario extends Phaser.GameObjects.Sprite {
   }
 
   collideWithMap(sprite, tile) {
-    console.log({ sprite, tile });
     // Just run callbacks when hitting something from below or trying to enter it
     // if (this.body.velocity.y < 0) {
     this.scene.tileCollision(sprite, tile);

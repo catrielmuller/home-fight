@@ -165,11 +165,10 @@ class GameScene extends Phaser.Scene {
     this.cameras.main.roundPixels = true;
 
     socket.on('broadcastProjectile', projectileRecieved => {
-      console.log('Projectile incoming!', projectileRecieved);
       let fireball = this.mario.scene.fireballs.get(this);
       if (fireball) {
         fireball.draw(projectileRecieved);
-      };
+      }
     });
     
       //Object.values(players).forEach(this.createEnemyPlayer);
@@ -184,7 +183,6 @@ class GameScene extends Phaser.Scene {
 
   createEnemyPlayer(player) {
     const { x, y, r, id } = player;
-    console.log('Player: ', player);
     if (socket.id === id) {
       return;
     }
