@@ -47,19 +47,17 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     this.scene.physics.world.collide(this, this.scene.groundLayer, () =>
       this.collided()
     );
-    this.scene.physics.world.overlap(
-      this,
-      this.scene.mario,
-      (fire, mario) => {
-        //console.log("colision! ",fire, mario)
-        socket.emit('hit', {
-            source: fire.owner,
-            target: socket.id,
-            
-          });
-        mario.losePoints()
+    this.scene.physics.world.overlap(this, this.scene.mario, (fire, mario) => {
+      if (socket.id === fire.owner) {
+        return;
       }
-    );
+      //console.log("colision! ",fire, mario)
+      socket.emit('hit', {
+        source: fire.owner,
+        target: socket.id
+      });
+      mario.losePoints();
+    });
   }
 
   collided() {
