@@ -8,6 +8,9 @@
     "parserOptions": {
         "sourceType": "module"
     },
+    "globals": {
+      "Phaser": true
+    },
     "rules": {
         "indent": [
             "error",
