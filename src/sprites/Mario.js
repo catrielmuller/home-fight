@@ -51,7 +51,7 @@ export default class Mario extends Phaser.GameObjects.Sprite {
   update(keys, time, delta) {
     if (this.y > 2040) {
       // Really superdead, has been falling for a while.
-      this.scene.scene.start('TitleScene');
+      this.scene.scene.start('GameScene');
 
       // If Mario falls down a cliff or died, just let him drop from the sky and prentend like nothing happened
       // this.y = -32;
