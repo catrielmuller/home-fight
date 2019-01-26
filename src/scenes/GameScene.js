@@ -130,9 +130,9 @@ class GameScene extends Phaser.Scene {
     // CREATE MARIO!!!
     this.mario = new Mario({
       scene: this,
-      key: 'mario',
+      key: 'sprites',
       x: 16 * 6,
-      y: this.sys.game.config.height - 48 - 48
+      y: this.sys.game.config.height - (780)
     });
 
     // Get players

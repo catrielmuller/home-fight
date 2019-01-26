@@ -1,0 +1,83 @@
+{
+	"textures": [
+		{
+			"image": "sprites-0.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 95,
+				"h": 182
+			},
+			"scale": 0.5,
+			"frames": [
+				{
+					"filename": "players/playera1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 135,
+						"h": 175
+					},
+					"spriteSourceSize": {
+						"x": 30,
+						"y": 18,
+						"w": 93,
+						"h": 147
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 93,
+						"h": 147
+					}
+				},
+				{
+					"filename": "candies/candya1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 75,
+						"h": 75
+					},
+					"spriteSourceSize": {
+						"x": 21,
+						"y": 27,
+						"w": 34,
+						"h": 31
+					},
+					"frame": {
+						"x": 1,
+						"y": 150,
+						"w": 34,
+						"h": 31
+					}
+				},
+				{
+					"filename": "candies/candyb1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 76,
+						"h": 68
+					},
+					"spriteSourceSize": {
+						"x": 18,
+						"y": 18,
+						"w": 33,
+						"h": 29
+					},
+					"frame": {
+						"x": 37,
+						"y": 150,
+						"w": 33,
+						"h": 29
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:c07abf91b51a5d5a4218cab31d91490a:65689cedfcea98d13d1ec01f1b2cf3e2:af6e57a991ea0b4b415dbcb7eb72ce12$"
+	}
+}

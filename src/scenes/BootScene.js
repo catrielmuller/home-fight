@@ -67,6 +67,12 @@ class BootScene extends Phaser.Scene {
       'assets/mario-sprites.json'
     );
 
+    this.load.multiatlas(
+      'sprites',
+      'assets/sprites/sprites.json',
+      'assets/sprites'
+    );
+
     // Music to play. It's not properly edited for an continous loop, but game play experience isn't really the aim of this repository either.
     this.load.audio('overworld', [
       'assets/music/overworld.ogg',

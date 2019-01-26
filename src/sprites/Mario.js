@@ -29,7 +29,7 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       step: 0
     };
     this.enteringPipe = false;
-    this.anims.play('stand');
+    this.anims.play('playera');
     this.alive = true;
     this.type = 'mario';
     this.jumpTimer = 0;
@@ -201,7 +201,7 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       this.anims.currentAnim.key !== anim &&
       !this.scene.physics.world.isPaused
     ) {
-      this.anims.play(anim);
+      //this.anims.play(anim);
     }
 
     this.physicsCheck = true;
@@ -269,11 +269,11 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     if (large) {
       this.large();
       this.animSuffix = 'Super';
-      this.play('grow');
+      //this.play('grow');
     } else {
       this.small();
       this.animSuffix = '';
-      this.play('shrink');
+      //this.play('shrink');
     }
   }
 
@@ -289,7 +289,7 @@ export default class Mario extends Phaser.GameObjects.Sprite {
 
   die() {
     this.scene.music.pause();
-    this.play('death');
+    //this.play('death');
     this.scene.sound.playAudioSprite('sfx', 'smb_mariodie');
     this.body.setAcceleration(0);
     this.body.setVelocity(0, -300);
@@ -297,7 +297,6 @@ export default class Mario extends Phaser.GameObjects.Sprite {
   }
 
   collideWithMap(sprite, tile) {
-    console.log({ sprite, tile });
     // Just run callbacks when hitting something from below or trying to enter it
     // if (this.body.velocity.y < 0) {
     this.scene.tileCollision(sprite, tile);
@@ -307,9 +306,9 @@ export default class Mario extends Phaser.GameObjects.Sprite {
   enterPipe(id, dir, init = true) {
     if (init) {
       if (this.animSuffix === '') {
-        this.play('stand');
+        //this.play('stand');
       } else {
-        this.play('bend' + this.animSuffix);
+        //this.play('bend' + this.animSuffix);
       }
       this.scene.sound.playAudioSprite('sfx', 'smb_pipe');
 
