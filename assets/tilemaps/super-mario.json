@@ -328,8 +328,8 @@
                  "type":"",
                  "visible":true,
                  "width":16,
-                 "x":255,
-                 "y":37
+                 "x":789,
+                 "y":139
                 }, 
                 {
                  "gid":45,
@@ -710,7 +710,7 @@
                  "name":"",
                  "rotation":0,
                  "type":"",
-                 "visible":true,
+                 "visible":false,
                  "width":16,
                  "x":3584,
                  "y":128
