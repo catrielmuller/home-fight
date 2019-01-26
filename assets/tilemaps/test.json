@@ -1,0 +1,14 @@
+{ "columns":9,
+ "image":"..\/images\/home-fight-home.png",
+ "imageheight":90,
+ "imagewidth":198,
+ "margin":0,
+ "name":"Test",
+ "spacing":0,
+ "tilecount":36,
+ "tiledversion":"1.2.1",
+ "tileheight":20,
+ "tilewidth":20,
+ "type":"tileset",
+ "version":1.2
+}
