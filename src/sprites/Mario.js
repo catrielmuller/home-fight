@@ -29,7 +29,7 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       step: 0
     };
     this.enteringPipe = false;
-    this.anims.play('stand');
+    this.anims.play('playera');
     this.alive = true;
     this.type = 'mario';
     this.jumpTimer = 0;
