@@ -10,7 +10,7 @@ import socket from '../helpers/socket';
 import EnemyPlayer from '../sprites/EnemyPlayer';
 
 class GameScene extends Phaser.Scene {
-  constructor(test) {
+  constructor() {
     super({
       key: 'GameScene'
     });
@@ -184,10 +184,9 @@ class GameScene extends Phaser.Scene {
     });
     window.toggleTouch = this.toggleTouch.bind(this);
 
-    // Mute music while in attract mode
-    if (this.attractMode) {
-      this.music.volume = 0;
-    }
+    // Mute music
+    this.music.volume = 0;
+
 
     // If the game ended while physics was disabled
     this.physics.world.resume();
@@ -341,67 +340,67 @@ class GameScene extends Phaser.Scene {
     // If the tile has a callback, lets fire it
     if (tile.properties.callback) {
       switch (tile.properties.callback) {
-        case 'questionMark':
-          // Shift to a metallic block
-          tile.index = 44;
+      case 'questionMark':
+        // Shift to a metallic block
+        tile.index = 44;
 
-          // Bounce it a bit
+        // Bounce it a bit
+        sprite.scene.bounceTile.restart(tile);
+
+        // The questionmark is no more
+        tile.properties.callback = null;
+
+        // Invincible blocks are only collidable from above, but everywhere once revealed
+        tile.setCollision(true);
+
+        // Check powerUp for what to do, make a coin if not defined
+        let powerUp = tile.powerUp ? tile.powerUp : 'coin';
+
+        // Make powerUp (including a coin)
+        (() =>
+          new PowerUp({
+            scene: sprite.scene,
+            key: 'sprites16',
+            x: tile.x * 16 + 8,
+            y: tile.y * 16 - 8,
+            type: powerUp
+          }))();
+
+        break;
+      case 'breakable':
+        if (sprite.type === 'mario' && sprite.animSuffix === '') {
+          // Can't break it anyway. Bounce it a bit.
           sprite.scene.bounceTile.restart(tile);
-
-          // The questionmark is no more
-          tile.properties.callback = null;
-
-          // Invincible blocks are only collidable from above, but everywhere once revealed
-          tile.setCollision(true);
-
-          // Check powerUp for what to do, make a coin if not defined
-          let powerUp = tile.powerUp ? tile.powerUp : 'coin';
-
-          // Make powerUp (including a coin)
-          (() =>
-            new PowerUp({
-              scene: sprite.scene,
-              key: 'sprites16',
-              x: tile.x * 16 + 8,
-              y: tile.y * 16 - 8,
-              type: powerUp
-            }))();
-
-          break;
-        case 'breakable':
-          if (sprite.type === 'mario' && sprite.animSuffix === '') {
-            // Can't break it anyway. Bounce it a bit.
-            sprite.scene.bounceTile.restart(tile);
-            sprite.scene.sound.playAudioSprite('sfx', 'smb_bump');
-          } else {
-            // get points
-            sprite.scene.updateScore(50);
-            sprite.scene.map.removeTileAt(
-              tile.x,
-              tile.y,
-              true,
-              true,
-              this.groundLayer
-            );
-            sprite.scene.sound.playAudioSprite('sfx', 'smb_breakblock');
-            sprite.scene.blockEmitter.emitParticle(6, tile.x * 16, tile.y * 16);
-          }
-          break;
-        case 'toggle16bit':
-          sprite.scene.eightBit = !sprite.scene.eightBit;
-          if (sprite.scene.eightBit) {
-            sprite.scene.tileset.setImage(
-              sprite.scene.sys.textures.get('tiles')
-            );
-          } else {
-            sprite.scene.tileset.setImage(
-              sprite.scene.sys.textures.get('tiles-16bit')
-            );
-          }
-          break;
-        default:
           sprite.scene.sound.playAudioSprite('sfx', 'smb_bump');
-          break;
+        } else {
+          // get points
+          sprite.scene.updateScore(50);
+          sprite.scene.map.removeTileAt(
+            tile.x,
+            tile.y,
+            true,
+            true,
+            this.groundLayer
+          );
+          sprite.scene.sound.playAudioSprite('sfx', 'smb_breakblock');
+          sprite.scene.blockEmitter.emitParticle(6, tile.x * 16, tile.y * 16);
+        }
+        break;
+      case 'toggle16bit':
+        sprite.scene.eightBit = !sprite.scene.eightBit;
+        if (sprite.scene.eightBit) {
+          sprite.scene.tileset.setImage(
+            sprite.scene.sys.textures.get('tiles')
+          );
+        } else {
+          sprite.scene.tileset.setImage(
+            sprite.scene.sys.textures.get('tiles-16bit')
+          );
+        }
+        break;
+      default:
+        sprite.scene.sound.playAudioSprite('sfx', 'smb_bump');
+        break;
       }
     } else {
       sprite.scene.sound.playAudioSprite('sfx', 'smb_bump');
@@ -427,31 +426,31 @@ class GameScene extends Phaser.Scene {
 
   removeFlag(step = 0) {
     switch (step) {
-      case 0:
-        this.music.pause();
-        this.sound.playAudioSprite('sfx', 'smb_flagpole');
-        this.mario.play('mario/climb' + this.mario.animSuffix);
-        this.mario.x = this.finishLine.x - 1;
-        this.tweens.add({
-          targets: this.finishLine.flag,
-          y: 240 - 6 * 8,
-          duration: 1500,
-          onComplete: () => this.removeFlag(1)
-        });
-        this.tweens.add({
-          targets: this.mario,
-          y: 240 - 3 * 16,
-          duration: 1000,
-          onComplete: () => {
-            this.mario.flipX = true;
-            this.mario.x += 11;
-          }
-        });
-        break;
-      case 1:
-        let sound = this.sound.addAudioSprite('sfx');
-        sound.on('ended', sound => {
-          /* this.mario.x = 48;
+    case 0:
+      this.music.pause();
+      this.sound.playAudioSprite('sfx', 'smb_flagpole');
+      this.mario.play('mario/climb' + this.mario.animSuffix);
+      this.mario.x = this.finishLine.x - 1;
+      this.tweens.add({
+        targets: this.finishLine.flag,
+        y: 240 - 6 * 8,
+        duration: 1500,
+        onComplete: () => this.removeFlag(1)
+      });
+      this.tweens.add({
+        targets: this.mario,
+        y: 240 - 3 * 16,
+        duration: 1000,
+        onComplete: () => {
+          this.mario.flipX = true;
+          this.mario.x += 11;
+        }
+      });
+      break;
+    case 1:
+      let sound = this.sound.addAudioSprite('sfx');
+      sound.on('ended', sound => {
+        /* this.mario.x = 48;
                     this.mario.y = -32;
                     this.mario.body.setVelocity(0);
                     this.mario.alpha = 1;
@@ -462,28 +461,28 @@ class GameScene extends Phaser.Scene {
                     this.levelTimer.time = 150 * 1000;
                     this.levelTimer.displayedTime = 255;
                     this.physics.world.resume(); */
-          sound.destroy();
-          this.scene.start('TitleScene');
-        });
-        sound.play('smb_stage_clear');
+        sound.destroy();
+        this.scene.start('TitleScene');
+      });
+      sound.play('smb_stage_clear');
 
-        this.mario.play('run' + this.mario.animSuffix);
+      this.mario.play('run' + this.mario.animSuffix);
 
-        this.mario.flipX = false;
-        this.tweens.add({
-          targets: this.mario,
-          x: this.finishLine.x + 6 * 16,
-          duration: 1000,
-          onComplete: () => this.removeFlag(2)
-        });
-        break;
-      case 2:
-        this.tweens.add({
-          targets: this.mario,
-          alpha: 0,
-          duration: 500
-        });
-        break;
+      this.mario.flipX = false;
+      this.tweens.add({
+        targets: this.mario,
+        x: this.finishLine.x + 6 * 16,
+        duration: 1000,
+        onComplete: () => this.removeFlag(2)
+      });
+      break;
+    case 2:
+      this.tweens.add({
+        targets: this.mario,
+        alpha: 0,
+        duration: 500
+      });
+      break;
     }
   }
 
@@ -544,25 +543,25 @@ class GameScene extends Phaser.Scene {
     this.map.getObjectLayer('enemies').objects.forEach(enemy => {
       let enemyObject;
       switch (this.tileset.tileProperties[enemy.gid - 1].name) {
-        case 'goomba':
-          enemyObject = new Goomba({
-            scene: this,
-            key: 'sprites16',
-            x: enemy.x,
-            y: enemy.y
-          });
-          break;
-        case 'turtle':
-          enemyObject = new Turtle({
-            scene: this,
-            key: 'mario-sprites',
-            x: enemy.x,
-            y: enemy.y
-          });
-          break;
-        default:
-          console.error('Unknown:', this.tileset.tileProperties[enemy.gid - 1]); // eslint-disable-line no-console
-          break;
+      case 'goomba':
+        enemyObject = new Goomba({
+          scene: this,
+          key: 'sprites16',
+          x: enemy.x,
+          y: enemy.y
+        });
+        break;
+      case 'turtle':
+        enemyObject = new Turtle({
+          scene: this,
+          key: 'mario-sprites',
+          x: enemy.x,
+          y: enemy.y
+        });
+        break;
+      default:
+        console.error('Unknown:', this.tileset.tileProperties[enemy.gid - 1]); // eslint-disable-line no-console
+        break;
       }
       this.enemyGroup.add(enemyObject);
     });
@@ -583,40 +582,40 @@ class GameScene extends Phaser.Scene {
       }
 
       switch (type) {
-        case 'powerUp':
-          // Modifies a questionmark below the modifier to contain something else than the default (coin)
-          tile = this.groundLayer.getTileAt(
-            modifier.x / 16,
-            modifier.y / 16 - 1
-          );
-          tile.powerUp = properties.powerUp;
-          tile.properties.callback = 'questionMark';
-          if (!tile.collides) {
-            // Hidden block without a question mark
-            tile.setCollision(false, false, false, true);
-          }
-          break;
-        case 'pipe':
-          // Adds info on where to go from a pipe under the modifier
-          tile = this.groundLayer.getTileAt(modifier.x / 16, modifier.y / 16);
-          tile.properties.dest = parseInt(modifier.properties.goto);
-          break;
-        case 'dest':
-          // Adds a destination so that a pipe can find it
-          this.destinations[modifier.properties.id] = {
-            x: modifier.x + modifier.width / 2,
-            top: modifier.y < 16
-          };
-          break;
-        case 'room':
-          // Adds a 'room' that is just info on bounds so that we can add sections below pipes
-          // in an level just using one tilemap.
-          this.rooms.push({
-            x: modifier.x,
-            width: modifier.width,
-            sky: modifier.properties.sky
-          });
-          break;
+      case 'powerUp':
+        // Modifies a questionmark below the modifier to contain something else than the default (coin)
+        tile = this.groundLayer.getTileAt(
+          modifier.x / 16,
+          modifier.y / 16 - 1
+        );
+        tile.powerUp = properties.powerUp;
+        tile.properties.callback = 'questionMark';
+        if (!tile.collides) {
+          // Hidden block without a question mark
+          tile.setCollision(false, false, false, true);
+        }
+        break;
+      case 'pipe':
+        // Adds info on where to go from a pipe under the modifier
+        tile = this.groundLayer.getTileAt(modifier.x / 16, modifier.y / 16);
+        tile.properties.dest = parseInt(modifier.properties.goto);
+        break;
+      case 'dest':
+        // Adds a destination so that a pipe can find it
+        this.destinations[modifier.properties.id] = {
+          x: modifier.x + modifier.width / 2,
+          top: modifier.y < 16
+        };
+        break;
+      case 'room':
+        // Adds a 'room' that is just info on bounds so that we can add sections below pipes
+        // in an level just using one tilemap.
+        this.rooms.push({
+          x: modifier.x,
+          width: modifier.width,
+          sky: modifier.properties.sky
+        });
+        break;
       }
     });
   }
@@ -718,11 +717,11 @@ class GameScene extends Phaser.Scene {
     whatThisHad.forEach(key => {
       if (ignore.indexOf(key) === -1 && this[key]) {
         switch (key) {
-          case 'enemyGroup':
-          case 'music':
-          case 'map':
-            this[key].destroy();
-            break;
+        case 'enemyGroup':
+        case 'music':
+        case 'map':
+          this[key].destroy();
+          break;
         }
         this[key] = null;
       }
