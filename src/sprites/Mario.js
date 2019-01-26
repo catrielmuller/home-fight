@@ -96,7 +96,7 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       const projectileOwner = socket.id;
       socket.emit('sendProjectile', {
         x: this.x,
-        y: this.y,
+        y: this.y - 2,
         left: this.flipX,
         projectileOwner
       });
