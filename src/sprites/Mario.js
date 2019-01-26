@@ -49,8 +49,8 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       this
     );
 
-    // this.animSuffix = 'Fire';
-    // this.scene.sound.playAudioSprite('sfx', 'smb_powerup');
+    this.animSuffix = 'Fire';
+    //this.scene.sound.playAudioSprite('sfx', 'smb_powerup');
   }
 
   update(keys, time, delta) {
@@ -290,6 +290,12 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     this.body.setAcceleration(0);
     this.body.setVelocity(0, -300);
     this.alive = false;
+  }
+
+  losePoints() {
+    this.scene.music.pause();
+    this.play('death');
+    this.scene.sound.playAudioSprite('sfx', 'smb_mariodie');
   }
 
   collideWithMap(sprite, tile) {
