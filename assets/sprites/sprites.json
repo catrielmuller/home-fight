@@ -4,13 +4,118 @@
 			"image": "sprites-0.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 95,
-				"h": 182
+				"w": 250,
+				"h": 448
 			},
 			"scale": 0.5,
 			"frames": [
 				{
-					"filename": "players/playera1.png",
+					"filename": "test/PJ6",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 112,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 3,
+						"w": 104,
+						"h": 147
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 104,
+						"h": 147
+					}
+				},
+				{
+					"filename": "test/PJ3",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 112,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 4,
+						"w": 94,
+						"h": 145
+					},
+					"frame": {
+						"x": 107,
+						"y": 1,
+						"w": 94,
+						"h": 145
+					}
+				},
+				{
+					"filename": "candies/candya1",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 75,
+						"h": 75
+					},
+					"spriteSourceSize": {
+						"x": 21,
+						"y": 27,
+						"w": 34,
+						"h": 31
+					},
+					"frame": {
+						"x": 203,
+						"y": 1,
+						"w": 34,
+						"h": 31
+					}
+				},
+				{
+					"filename": "candies/candyb1",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 76,
+						"h": 68
+					},
+					"spriteSourceSize": {
+						"x": 18,
+						"y": 18,
+						"w": 33,
+						"h": 29
+					},
+					"frame": {
+						"x": 203,
+						"y": 34,
+						"w": 33,
+						"h": 29
+					}
+				},
+				{
+					"filename": "test/PJ5",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 112,
+						"h": 154
+					},
+					"spriteSourceSize": {
+						"x": 9,
+						"y": 0,
+						"w": 93,
+						"h": 149
+					},
+					"frame": {
+						"x": 107,
+						"y": 148,
+						"w": 93,
+						"h": 149
+					}
+				},
+				{
+					"filename": "players/playera1",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
@@ -25,51 +130,72 @@
 					},
 					"frame": {
 						"x": 1,
-						"y": 1,
+						"y": 150,
 						"w": 93,
 						"h": 147
 					}
 				},
 				{
-					"filename": "candies/candya1.png",
+					"filename": "test/PJ2",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
-						"w": 75,
-						"h": 75
+						"w": 89,
+						"h": 154
 					},
 					"spriteSourceSize": {
-						"x": 21,
-						"y": 27,
-						"w": 34,
-						"h": 31
+						"x": 4,
+						"y": 0,
+						"w": 81,
+						"h": 148
 					},
 					"frame": {
 						"x": 1,
-						"y": 150,
-						"w": 34,
-						"h": 31
+						"y": 299,
+						"w": 81,
+						"h": 148
 					}
 				},
 				{
-					"filename": "candies/candyb1.png",
+					"filename": "test/PJ1",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 89,
+						"h": 144
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 89,
+						"h": 144
+					},
+					"frame": {
+						"x": 84,
+						"y": 299,
+						"w": 89,
+						"h": 144
+					}
+				},
+				{
+					"filename": "test/PJ4",
 					"rotated": false,
 					"trimmed": true,
 					"sourceSize": {
-						"w": 76,
-						"h": 68
+						"w": 112,
+						"h": 154
 					},
 					"spriteSourceSize": {
-						"x": 18,
-						"y": 18,
-						"w": 33,
-						"h": 29
+						"x": 19,
+						"y": 0,
+						"w": 74,
+						"h": 142
 					},
 					"frame": {
-						"x": 37,
-						"y": 150,
-						"w": 33,
-						"h": 29
+						"x": 175,
+						"y": 299,
+						"w": 74,
+						"h": 142
 					}
 				}
 			]
@@ -78,6 +204,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:c07abf91b51a5d5a4218cab31d91490a:65689cedfcea98d13d1ec01f1b2cf3e2:af6e57a991ea0b4b415dbcb7eb72ce12$"
+		"smartupdate": "$TexturePacker:SmartUpdate:e10bec1c87a4b47629d74fe6b7217bed:c815925aa18a883a8c20df82482150e5:af6e57a991ea0b4b415dbcb7eb72ce12$"
 	}
 }

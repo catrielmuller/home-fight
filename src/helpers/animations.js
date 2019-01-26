@@ -285,11 +285,12 @@ export default function makeAnimations(scene) {
 
     config = {
         key: 'playera',
-        frames: [{
-            frame: 'players/playera',
-            key: 'sprites'
-        }],
-        frameRate: 1,
+        frames: scene.anims.generateFrameNames('sprites', {
+            prefix: 'test/PJ',
+            start: 1,
+            end: 3
+        }),
+        frameRate: 10,
         repeat: -1,
         repeatDelay: 0
     };

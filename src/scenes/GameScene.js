@@ -42,7 +42,7 @@ class GameScene extends Phaser.Scene {
     this.map = this.make.tilemap({
       key: 'map'
     });
-    this.add.tileSprite(0, 0, 0,0, 'background-home');
+    this.add.tileSprite(4157, 675, 8315, 1351, 'background-home');
     this.tileset = this.map.addTilesetImage('SuperMarioBros-World1-1', 'tiles');
 
     // Dynamic layer because we want breakable and animated tiles
@@ -132,8 +132,8 @@ class GameScene extends Phaser.Scene {
     this.mario = new Mario({
       scene: this,
       key: 'sprites',
-      x: 16 * 6,
-      y: this.sys.game.config.height - (780)
+      x: 3820,
+      y: 950
     });
 
     //adds player name
