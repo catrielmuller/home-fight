@@ -277,33 +277,6 @@ class GameScene extends Phaser.Scene {
       return;
     }
 
-    this.levelTimer.time -= delta * 2;
-    if (this.levelTimer.time - this.levelTimer.displayedTime * 1000 < 1000) {
-      this.levelTimer.displayedTime = Math.round(this.levelTimer.time / 1000);
-      this.levelTimer.textObject.setText(
-        ('' + this.levelTimer.displayedTime).padStart(3, '0')
-      );
-      if (this.levelTimer.displayedTime < 50 && !this.levelTimer.hurry) {
-        this.levelTimer.hurry = true;
-        this.music.pause();
-        let sound = this.sound.addAudioSprite('sfx');
-        sound.on('ended', sound => {
-          this.music.seek = 0;
-          this.music.rate = 1.5;
-          this.music.resume();
-          sound.destroy();
-        });
-        sound.play('smb_warning');
-      }
-      if (this.levelTimer.displayedTime < 1) {
-        this.mario.die();
-        this.levelTimer.hurry = false;
-        this.music.rate = 1;
-        this.levelTimer.time = 150 * 1000;
-        this.levelTimer.displayedTime = 255;
-      }
-    }
-
     // Run the update method of Mario
     this.mario.update(this.keys, time, delta);
 
@@ -598,28 +571,17 @@ class GameScene extends Phaser.Scene {
       5 * 8,
       8,
       'font',
-      'MARIO                      TIME',
+      'MARIO',
       8
     );
     hud.setScrollFactor(0, 0);
-    this.levelTimer = {
-      textObject: this.add.bitmapText(36 * 8, 16, 'font', '255', 8),
-      time: 150 * 1000,
-      displayedTime: 255,
-      hurry: false
-    };
-    this.levelTimer.textObject.setScrollFactor(0, 0);
     this.score = {
       pts: 0,
       textObject: this.add.bitmapText(5 * 8, 16, 'font', '000000', 8)
     };
     this.score.textObject.setScrollFactor(0, 0);
 
-    if (this.attractMode) {
-      hud.alpha = 0;
-      this.levelTimer.textObject.alpha = 0;
-      this.score.textObject.alpha = 0;
-    }
+    
   }
 
   cleanUp() {
@@ -682,7 +644,6 @@ class GameScene extends Phaser.Scene {
       'keys',
       'blockEmitter',
       'bounceTile',
-      'levelTimer',
       'score',
       'finishLine',
       'touchControls'
