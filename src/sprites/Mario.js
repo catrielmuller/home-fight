@@ -213,10 +213,10 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       }
     }
     if (this.body.velocity.y < 0 || this.body.blocked.down) {
-      this.body.setVelocityY(-200);
+      this.body.setVelocityY(-400);
     }
     if (!this.jumping) {
-      this.jumpTimer = 300;
+      this.jumpTimer = 400;
     }
     this.jumping = true;
   }
@@ -252,27 +252,27 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     if (large) {
       this.large();
       this.animSuffix = 'Super';
-      this.play('grow');
+      //this.play('grow');
     } else {
       this.small();
       this.animSuffix = '';
-      this.play('shrink');
+      //this.play('shrink');
     }
   }
 
   small() {
-    this.body.setSize(10, 10);
-    this.body.offset.set(3, 6);
+    this.body.setSize(111, 154);
+    this.body.offset.set(0, 10);
   }
 
   large() {
-    this.body.setSize(10, 14);
-    this.body.offset.set(3, 15);
+    this.body.setSize(111, 154);
+    this.body.offset.set(0, 10);
   }
 
   die() {
     this.scene.music.pause();
-    this.play('death');
+    //this.play('death');
     this.scene.sound.playAudioSprite('sfx', 'smb_mariodie');
     this.body.setAcceleration(0);
     this.body.setVelocity(0, -300);

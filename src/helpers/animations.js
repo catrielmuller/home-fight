@@ -282,4 +282,18 @@ export default function makeAnimations(scene) {
     };
 
     scene.anims.create(config);
+
+    config = {
+        key: 'playera',
+        frames: scene.anims.generateFrameNames('sprites', {
+            prefix: 'test/PJ',
+            start: 1,
+            end: 3
+        }),
+        frameRate: 10,
+        repeat: -1,
+        repeatDelay: 0
+    };
+    console.log(config)
+    scene.anims.create(config);
 }

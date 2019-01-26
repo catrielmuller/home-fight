@@ -7,8 +7,8 @@ const config = {
   pixelArt: true,
   roundPixels: true,
   parent: 'content',
-  width: 400,
-  height: 240,
+  width: 1280,
+  height: 720,
   zoom: 10,
   autoResize: true,
   physics: {

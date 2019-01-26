@@ -1,0 +1,14 @@
+{ "columns":415,
+ "image":"..\/images\/background.png",
+ "imageheight":1351,
+ "imagewidth":8315,
+ "margin":0,
+ "name":"background",
+ "spacing":0,
+ "tilecount":27805,
+ "tiledversion":"1.2.1",
+ "tileheight":20,
+ "tilewidth":20,
+ "type":"tileset",
+ "version":1.2
+}

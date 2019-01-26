@@ -41,6 +41,7 @@ class GameScene extends Phaser.Scene {
     this.map = this.make.tilemap({
       key: 'map'
     });
+    this.add.tileSprite(4157, 675, 8315, 1351, 'background-home');
     this.tileset = this.map.addTilesetImage('SuperMarioBros-World1-1', 'tiles');
 
     // Dynamic layer because we want breakable and animated tiles
@@ -54,7 +55,6 @@ class GameScene extends Phaser.Scene {
     this.physics.world.bounds.width = this.groundLayer.width;
 
     // Add the background as an tilesprite.
-    this.add.tileSprite(0, 0, this.groundLayer.width, 500, 'background-clouds');
 
     // Set collision by property
     this.groundLayer.setCollisionByProperty({
@@ -132,9 +132,9 @@ class GameScene extends Phaser.Scene {
     // CREATE MARIO!!!
     this.mario = new Mario({
       scene: this,
-      key: 'mario',
-      x: 16 * 6,
-      y: this.sys.game.config.height - 48 - 48
+      key: 'sprites',
+      x: 3820,
+      y: 950
     });
 
     //adds player name

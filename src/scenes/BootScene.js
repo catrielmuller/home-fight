@@ -29,7 +29,7 @@ class BootScene extends Phaser.Scene {
       this.scene.start('GameScene');
     });
 
-    this.load.image('background-clouds', 'assets/images/clouds.png'); // 16-bit later
+    this.load.image('background-home', 'assets/images/background.png'); // 16-bit later
 
     // Tilemap with a lot of objects and tile-properties tricks
     this.load.tilemapTiledJSON('map', 'assets/tilemaps/home-fight-home.json');
@@ -65,6 +65,12 @@ class BootScene extends Phaser.Scene {
       'mario-sprites',
       'assets/mario-sprites.png',
       'assets/mario-sprites.json'
+    );
+
+    this.load.multiatlas(
+      'sprites',
+      'assets/sprites/sprites.json',
+      'assets/sprites'
     );
 
     // Music to play. It's not properly edited for an continous loop, but game play experience isn't really the aim of this repository either.
