@@ -136,6 +136,7 @@ class GameScene extends Phaser.Scene {
       y: this.sys.game.config.height - 48 - 48
     });
 
+    //adds player name
     this.playerName = this.add.bitmapText(
       this.mario.x,
       this.mario.y,
@@ -202,6 +203,8 @@ class GameScene extends Phaser.Scene {
       x,
       y,
     });
+
+    //adds other players names
     this.players[id].playerName = this.add.bitmapText(
       x,
       y,

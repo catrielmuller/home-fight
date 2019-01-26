@@ -3,7 +3,7 @@ import socket from '../helpers/socket';
 export default class EnemyPlayer extends Phaser.GameObjects.Sprite {
   constructor(config) {
     super(config.scene, config.x, config.y - 16, config.key);
-    // config.scene.physics.world.disable(this);
+    //config.scene.physics.world.enable(this);
     config.scene.add.existing(this);
     this.alive = true;
     this.anims.play('stand');
