@@ -10,11 +10,12 @@ import socket from '../helpers/socket';
 import EnemyPlayer from '../sprites/EnemyPlayer';
 
 class GameScene extends Phaser.Scene {
+  
   constructor() {
     super({
       key: 'GameScene'
     });
-
+    this.playerName;
     this.createEnemyPlayer = this.createEnemyPlayer.bind(this);
   }
 
@@ -135,6 +136,13 @@ class GameScene extends Phaser.Scene {
       y: this.sys.game.config.height - (780)
     });
 
+    this.playerName = this.add.bitmapText(
+      this.mario.x,
+      this.mario.y,
+      'font',
+      socket.id,
+      8
+    );
     // Get players
     this.players = {};
     socket.on('currentPlayers', players => {
@@ -154,6 +162,7 @@ class GameScene extends Phaser.Scene {
       const { id, x, y, r } = player;
       if (this.players[id]) {
         this.players[id].move({ x, y, r });
+        this.players[id].playerName.setPosition(x,y,1);
       }
     });
 
@@ -165,13 +174,12 @@ class GameScene extends Phaser.Scene {
     this.cameras.main.roundPixels = true;
 
     socket.on('broadcastProjectile', projectileRecieved => {
-      console.log('Projectile incoming!', projectileRecieved);
       let fireball = this.mario.scene.fireballs.get(this);
       if (fireball) {
         fireball.draw(projectileRecieved);
-      };
+      }
     });
-    
+
       //Object.values(players).forEach(this.createEnemyPlayer);
       //socket.off('currentPlayers');
 
@@ -184,7 +192,6 @@ class GameScene extends Phaser.Scene {
 
   createEnemyPlayer(player) {
     const { x, y, r, id } = player;
-    console.log('Player: ', player);
     if (socket.id === id) {
       return;
     }
@@ -193,8 +200,15 @@ class GameScene extends Phaser.Scene {
       scene: this,
       key: 'mario',
       x,
-      y
+      y,
     });
+    this.players[id].playerName = this.add.bitmapText(
+      x,
+      y,
+      'font',
+      id,
+      8
+    );
   }
 
   update(time, delta) {
@@ -223,7 +237,8 @@ class GameScene extends Phaser.Scene {
 
     // Run the update method of Mario
     this.mario.update(this.keys, time, delta);
-
+    this.playerName.setPosition(this.mario.x, this.mario.y,1);
+    
     // Run the update method of all enemies
     this.enemyGroup.children.entries.forEach(sprite => {
       sprite.update(time, delta);
