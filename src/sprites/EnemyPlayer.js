@@ -50,10 +50,9 @@ export default class EnemyPlayer extends Phaser.GameObjects.Sprite {
   }
 
   die() {
-    this.body.setAcceleration(0);
-    this.body.setVelocity(0, -300);
     this.alive = false;
-
+    this.scene.enemyPlayerGroup.remove(this);
+    this.destroy();
   }
 
 }

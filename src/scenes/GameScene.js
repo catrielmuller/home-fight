@@ -180,7 +180,7 @@ class GameScene extends Phaser.Scene {
     this.cameras.main.roundPixels = true;
 
     socket.on('broadcastProjectile', projectileRecieved => {
-      let fireball = this.mario.scene.fireballs.get(this);
+      let fireball = this.fireballs.get(this);
       if (fireball) {
         this.fireballs[projectileRecieved.id] = fireball;
         this.fireballs[projectileRecieved.id].id = projectileRecieved.id; 
@@ -222,17 +222,13 @@ class GameScene extends Phaser.Scene {
     //socket.off('currentPlayers');
 
     socket.on('playerDeathConfirmed', playerInfo => {
-      
-      for(var i = 0; i < this.players.length; i++){
-        if(playerInfo.id == this.players[i]){
-          this.players[i].die();
+        if(this.players[playerInfo.id]){
+          this.players[playerInfo.id].die();
+          this.players[playerInfo.id].playerName.destroy();
         }
-      }
 
       console.log(playerInfo  + " was eliminated");
     });
-
-
 
     this.fireballs = this.add.group({
       classType: Fire,

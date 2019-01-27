@@ -282,12 +282,16 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     this.scene.music.pause();
     this.play('death');
     socket.emit('playerDeath', {
-      player: this
+      player: this,
+      id: socket.id
     });
     this.scene.sound.playAudioSprite('sfx', 'smb_mariodie');
     this.body.setAcceleration(0);
     this.body.setVelocity(0, -300);
     this.alive = false;
+    this.scene.enemyPlayerGroup.remove(this);
+    this.destroy();
+
     //this.scene.time.events.add(Phaser.Timer.SECOND * 5, respawn, this);
 
   }
