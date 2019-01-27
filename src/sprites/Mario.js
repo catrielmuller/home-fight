@@ -279,6 +279,9 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     this.score = 0;
     this.scene.music.pause();
     this.play('death');
+    socket.emit('playerDeath', {
+      player: this
+    });
     this.scene.sound.playAudioSprite('sfx', 'smb_mariodie');
     this.body.setAcceleration(0);
     this.body.setVelocity(0, -300);
@@ -289,9 +292,6 @@ export default class Mario extends Phaser.GameObjects.Sprite {
 
   getHit() {
       if(this.score <= 1){
-        socket.emit('playerDeath', {
-          player: this
-        });
         this.die();
       } else {
         var scorelost = Math.round(this.score / 2); 

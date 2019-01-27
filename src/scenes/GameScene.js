@@ -218,6 +218,19 @@ class GameScene extends Phaser.Scene {
     //Object.values(players).forEach(this.createEnemyPlayer);
     //socket.off('currentPlayers');
 
+    socket.on('playerDeathConfirmed', playerInfo => {
+      
+      for(var i = 0; i < this.players.length; i++){
+        if(playerInfo.id == this.players[i]){
+          this.players[i].die();
+        }
+      }
+
+      console.log(updatedScore);
+    });
+
+
+
     this.fireballs = this.add.group({
       classType: Fire,
       maxSize: 1000,
