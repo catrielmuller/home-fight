@@ -29,14 +29,14 @@ class BootScene extends Phaser.Scene {
       this.scene.start('SelectScene');
     });
 
-    this.load.image('background-clouds', 'assets/images/clouds.png'); // 16-bit later
+    this.load.image('background', 'assets/images/background.png');
 
     // Tilemap with a lot of objects and tile-properties tricks
     this.load.tilemapTiledJSON('map', 'assets/tilemaps/home-fight-home.json');
 
     // I load the tiles as a spritesheet so I can use it for both sprites and tiles,
     // Normally you should load it as an image.
-    this.load.spritesheet('tiles', 'assets/images/super-mario.png', {
+    this.load.spritesheet('tiles', 'assets/images/home-fight-home.png', {
       frameWidth: 16,
       frameHeight: 16,
       spacing: 2
@@ -45,7 +45,7 @@ class BootScene extends Phaser.Scene {
     // Support for switching between 8-bit and 16-bit tiles
     this.load.spritesheet(
       'tiles-16bit',
-      'assets/images/super-mario-16bit.png',
+      'assets/images/home-fight-home.png',
       {
         frameWidth: 16,
         frameHeight: 16,
