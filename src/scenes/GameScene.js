@@ -28,7 +28,7 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    this.physics.world.gravity.y = 1300;
+    this.physics.world.gravity.y = 2400;
     this.homeFightUser = localStorage.getItem('home-fight-user');
     this.eightBit = true;
     // Add and play the music

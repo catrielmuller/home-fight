@@ -124,7 +124,7 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     if (this.body.velocity.y === 0) {
       if (this.bounce < 3) {
         this.bounce += 1;
-        this.body.velocity.y = -450 / this.bounce;
+        this.body.velocity.y = -750 / this.bounce;
         this.body.velocity.x /= 2;
       } else {
         this.pickable = true;

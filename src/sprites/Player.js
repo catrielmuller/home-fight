@@ -14,7 +14,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     this.acceleration = 2400;
     this.body.maxVelocity.x = 800;
-    this.body.maxVelocity.y = 1000;
+    this.body.maxVelocity.y = 2000;
     this.animSuffix = '';
     this.bullets = config.bullets;
     this.respawnCount = 5;
@@ -195,7 +195,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     this.physicsCheck = true;
     const { x, y, flipX } = this;
-    // console.log('position', x + '   ' + y);
+    console.log('position', x + '   ' + y);
     socket.emit('move', {
       anim: anim,
       velx: this.body.velocity.x,
@@ -225,7 +225,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
     if (this.body.velocity.y < 0 || this.body.blocked.down) {
-      this.body.setVelocityY(-600);
+      this.body.setVelocityY(-1000);
     }
     if (!this.jumping) {
       this.jumpTimer = 300;
@@ -274,7 +274,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     });
     this.scene.sound.playAudioSprite('sfx', 'smb_mariodie');
     this.body.setAcceleration(0);
-    this.body.setVelocity(0, -300);
+    this.body.setVelocity(0, -600);
     this.alive = false;
     // this.scene.enemyPlayerGroup.remove(this);
     this.scene.playerName.destroy();
@@ -327,7 +327,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
   respawnText(textString, index, scene) {
     console.log(textString, index);
     var style = {
-      font: '20px Times New Roman',
+      font: '48px Verdana',
       fill: 'red',
       align: 'right',
       backgroundColor: '#ffcc99'
