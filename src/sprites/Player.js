@@ -31,12 +31,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
       step: 0
     };
     this.enteringPipe = false;
-    this.anims.play('stand');
+    this.anims.play('player-pv-idle');
     this.alive = true;
     this.type = 'player';
     this.jumpTimer = 0;
     this.jumping = false;
     this.fireCoolDown = 0;
+    this.isHurt = false;
 
     this.on(
       'animationcomplete',
@@ -154,42 +155,47 @@ export default class Player extends Phaser.GameObjects.Sprite {
     let anim = null;
     if (this.body.velocity.y !== 0) {
       anim = 'jump';
+      anim = 'player-pv-idle';
     } else if (this.body.velocity.x !== 0) {
-      anim = 'run';
+      anim = 'player-pv-run';
       if (
         (input.left || input.right) &&
         ((this.body.velocity.x > 0 && this.body.acceleration.x < 0) ||
           (this.body.velocity.x < 0 && this.body.acceleration.x > 0))
       ) {
         anim = 'turn';
+        anim = 'player-pv-idle';
       } else if (
         this.animSuffix !== '' &&
         input.down &&
         !(input.right || input.left)
       ) {
         anim = 'bend';
+        anim = 'player-pv-idle';
       }
     } else {
-      anim = 'stand';
+      anim = 'player-pv-idle';
       if (
         this.animSuffix !== '' &&
         input.down &&
         !(input.right || input.left)
       ) {
-        anim = 'bend';
+        anim = 'player-pv-idle';
       }
     }
 
-    anim += this.animSuffix;
+    //anim += this.animSuffix;
     if (
       this.anims.currentAnim.key !== anim &&
       !this.scene.physics.world.isPaused
     ) {
+      console.log('anim', anim);
       this.anims.play(anim);
     }
 
     this.physicsCheck = true;
     const { x, y, flipX } = this;
+    console.log('position', x + '   ' + y);
     socket.emit('move', {
       anim: anim,
       velx: this.body.velocity.x,
@@ -235,24 +241,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.body.setVelocityY(-150);
   }
 
-  hurtBy(enemy) {
-    if (!this.alive) {
-      return;
-    }
-    if (this.star.active) {
-      enemy.starKilled(enemy, this);
-    } else if (this.wasHurt < 1) {
-      if (this.animSuffix !== '') {
-        this.resize(false);
-        this.scene.sound.playAudioSprite('sfx', 'smb_pipe');
-
-        this.wasHurt = 2000;
-      } else {
-        this.die();
-      }
-    }
-  }
-
   resize(large) {
     this.scene.physics.world.pause();
     if (large) {
@@ -267,13 +255,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   small() {
-    this.body.setSize(10, 10);
-    this.body.offset.set(3, 6);
+    this.body.setSize(105, 180);
+    this.body.offset.set(25, 85);
   }
 
   large() {
-    this.body.setSize(10, 14);
-    this.body.offset.set(3, 15);
+    this.body.setSize(105, 180);
+    this.body.offset.set(25, 85);
   }
 
   die() {
@@ -306,6 +294,33 @@ export default class Player extends Phaser.GameObjects.Sprite {
       );
     }
     setTimeout(this.scene.respawnPlayer, this.respawnCount * 1000, this);
+  }
+
+  getHurt(fireTouch) {
+    if(this.isHurt){ 
+      return
+    } else {
+      this.isHurt = true;
+      let finalAcelX = 0;
+      let finalAcelY = 0;
+      if(fireTouch.right) finalAcelX =200
+      if(fireTouch.left) finalAcelX =-200
+
+      this.body.setVelocityX(finalAcelX);
+      var tween = this.scene.tweens.add({ targets: this, alpha: 0, duration: 200, yoyo: true, loop:-1  },
+          1900,
+          'Linear',
+          true
+        );
+      setTimeout(this.finishHurting,2000, this, tween)
+    }    
+  }
+
+  finishHurting(player, tween){
+    console.log("invencibility has finished")
+    player.isHurt = false;
+    tween.stop();
+    player.alpha = 1;
   }
 
   respawnText(textString, index, scene) {

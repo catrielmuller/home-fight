@@ -244,6 +244,9 @@ class GameScene extends Phaser.Scene {
     socket.on('hitConfirmed', hitInfo => {
       var timeOnScreen = 3000;
       var eventText = hitInfo.sourceName + ' pwneo a ' + hitInfo.targetName;
+      if(this.players[hitInfo.target]){
+        this.players[hitInfo.target].getHurt();
+      }
       console.log(eventText, this.cameras);
       var style = {
         font: '16px Arial',
@@ -512,7 +515,7 @@ class GameScene extends Phaser.Scene {
         break;
       }
     });
-  }
+  } 
 
   createHUD() {
     const hud = this.add.text(20, 20, 'CANDIES', {
