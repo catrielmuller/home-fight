@@ -298,6 +298,15 @@ export default function makeAnimations(scene) {
     };
     scene.anims.create(config);
 
+    config = {
+        key: 'candy-stop',
+        frames: [{
+            frame: 'candies/fire1',
+            key: 'sprites'
+        }]
+    };
+    scene.anims.create(config);
+
 
     config = {
         key: 'player-pv-run',
