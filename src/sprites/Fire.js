@@ -59,7 +59,8 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     this.body.allowGravity = true;
     this.setPosition(projectileRecieved.x, projectileRecieved.y);
     this.body.velocity.x = 0;
-    this.body.velocity.y = 0;
+    this.body.velocity.y = 10;
+    this.pickable = true;
   }
 
   update(time, delta) {

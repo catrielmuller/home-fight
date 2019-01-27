@@ -230,7 +230,7 @@ class GameScene extends Phaser.Scene {
       //console.log("DIBUJAR BOLITA EN ",spawnInfo)
       let fireball = this.fireballs.get(this);
       if (fireball) {
-        fireball.draw(spawnInfo);
+        fireball.spawn(spawnInfo);
       } else {
         console.error('FAILED TO GET FIREBALL');
       }
