@@ -17,6 +17,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.body.maxVelocity.y = 500;
     this.animSuffix = '';
     this.bullets = config.bullets;
+    this.respawnCount = 5;
     // this.small();
 
     // this.animSuffix = 'Super';
@@ -289,13 +290,44 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.alive = false;
     // this.scene.enemyPlayerGroup.remove(this);
     this.scene.playerName.destroy();
+    this.respawn();
     this.destroy();
-
-    //this.scene.time.events.add(Phaser.Timer.SECOND * 5, respawn, this);
   }
 
   respawn() {
-    //TODO: respawn
+    for (var i = 0; i < this.respawnCount; i++) {
+      var count = this.respawnCount - i;
+      setTimeout(
+        this.respawnText,
+        (i + 1) * 1000,
+        'Empezando de nuevo en ' + count + '...',
+        i,
+        this.scene
+      );
+    }
+    setTimeout(this.scene.respawnPlayer, this.respawnCount * 1000, this);
+  }
+
+  respawnText(textString, index, scene) {
+    console.log(textString, index);
+    var style = {
+      font: '20px Times New Roman',
+      fill: 'red',
+      align: 'right',
+      backgroundColor: '#ffcc99'
+    };
+
+    var text = scene.add
+      .text(500, 20 * index, textString, style)
+      .setScrollFactor(0, 0);
+
+    text.alpha = 1;
+    scene.tweens.add(
+      { targets: text, alpha: 0, duration: 1000 },
+      3000,
+      'Linear',
+      true
+    );
   }
 
   collideWithMap(sprite, tile) {

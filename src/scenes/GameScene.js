@@ -227,7 +227,7 @@ class GameScene extends Phaser.Scene {
     });
 
     socket.on('hitConfirmed', hitInfo => {
-      var timeOnScreen = 10000;
+      var timeOnScreen = 3000;
       var eventText = hitInfo.sourceName + ' pwneo a ' + hitInfo.targetName;
       console.log(eventText, this.cameras);
       var style = {
@@ -248,7 +248,7 @@ class GameScene extends Phaser.Scene {
 
       text.alpha = 1;
       this.tweens.add(
-        { targets: text, alpha: 0 },
+        { targets: text, alpha: 0, duration: timeOnScreen },
         timeOnScreen,
         'Linear',
         true
@@ -277,7 +277,6 @@ class GameScene extends Phaser.Scene {
       runChildUpdate: false // Due to https://github.com/photonstorm/phaser/issues/3724
     });
   }
-
   createEnemyPlayer(player) {
     const { x, y, r, id, username, bullets } = player;
     this.players[id] = new EnemyPlayer({
@@ -507,6 +506,13 @@ class GameScene extends Phaser.Scene {
       textObject: this.add.bitmapText(5 * 8, 8 + 30, 'font', '000000', 24)
     };
     this.bullets.textObject.setScrollFactor(0, 0);
+  }
+
+  respawnPlayer(player) {
+    
+    player.destroy();
+    location.reload(true);
+
   }
 
   cleanUp() {
