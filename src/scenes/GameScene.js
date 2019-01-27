@@ -5,7 +5,9 @@ import AnimatedTiles from 'phaser-animated-tiles/dist/AnimatedTiles.min.js';
 import Fire from '../sprites/Fire';
 
 import socket from '../helpers/socket';
+
 import EnemyPlayer from '../sprites/EnemyPlayer';
+import Spawnlocations from '../helpers/spawnlocations';
 
 class GameScene extends Phaser.Scene {
   constructor() {
@@ -126,13 +128,16 @@ class GameScene extends Phaser.Scene {
     // If the game ended while physics was disabled
     this.physics.world.resume();
 
-    // CREATE MARIO!!!
+    // CREATE PLAYER!!!
     this.bullets = 0;
+    var spawnLocation = Spawnlocations.getRandomSpawnLocation();
+    console.log('Spawning player on location ', spawnLocation);
+
     this.player = new Player({
       scene: this,
       key: 'player',
-      x: 16 * 6,
-      y: this.sys.game.config.height - 48 - 48
+      x: spawnLocation.x,
+      y: spawnLocation.y
     });
 
     //adds player name
