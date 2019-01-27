@@ -514,10 +514,24 @@ class GameScene extends Phaser.Scene {
   }
 
   createHUD() {
-    const hud = this.add.bitmapText(5 * 8, 8, 'font', 'CANDY', 24);
+    const hud = this.add.text(20, 20, 'CANDIES', {
+      fontSize: 24,
+      fontWeight: 'bold',
+      stroke: '#000000',
+      strokeThickness: 3,
+      fill: '#fff',
+      active: true
+    });
     hud.setScrollFactor(0, 0);
     this.bullets = {
-      textObject: this.add.bitmapText(5 * 8, 8 + 30, 'font', '000000', 24)
+      textObject: this.add.text(20, 20 + 30, '000000', {
+        fontSize: 24,
+        fontWeight: 'bold',
+        stroke: '#000000',
+        strokeThickness: 3,
+        fill: '#fff',
+        active: true
+      })
     };
     this.bullets.textObject.setScrollFactor(0, 0);
   }
