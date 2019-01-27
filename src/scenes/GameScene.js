@@ -1,6 +1,4 @@
-import Mario from '../sprites/Mario';
-import Goomba from '../sprites/Goomba';
-import Turtle from '../sprites/Turtle';
+import Player from '../sprites/Player';
 import PowerUp from '../sprites/PowerUp';
 import SMBTileSprite from '../sprites/SMBTileSprite';
 import AnimatedTiles from 'phaser-animated-tiles/dist/AnimatedTiles.min.js';
@@ -129,17 +127,17 @@ class GameScene extends Phaser.Scene {
     this.physics.world.resume();
 
     // CREATE MARIO!!!
-    this.mario = new Mario({
+    this.player = new Player({
       scene: this,
-      key: 'mario',
+      key: 'player',
       x: 16 * 6,
       y: this.sys.game.config.height - 48 - 48
     });
 
     //adds player name
     this.playerName = this.add.bitmapText(
-      this.mario.x,
-      this.mario.y,
+      this.player.x,
+      this.player.y,
       'font',
       this.homeFightUser,
       8
@@ -167,23 +165,26 @@ class GameScene extends Phaser.Scene {
       if (this.players[id]) {
         this.players[id].move(player);
         this.players[id].playerName.x =
-          (this.players[id].x + (this.players[id].width / 2))  - ( this.players[id].playerName.width / 2);
-        this.players[id].playerName.y = this.players[id].y - this.players[id].height;
+          this.players[id].x +
+          this.players[id].width / 2 -
+          this.players[id].playerName.width / 2;
+        this.players[id].playerName.y =
+          this.players[id].y - this.players[id].height;
       }
     });
 
-    socket.emit('initPlayer', {username: this.homeFightUser});
+    socket.emit('initPlayer', { username: this.homeFightUser });
 
     // The camera should follow Mario
-    this.cameras.main.startFollow(this.mario);
+    this.cameras.main.startFollow(this.player);
 
     this.cameras.main.roundPixels = true;
 
     socket.on('broadcastProjectile', projectileRecieved => {
-      let fireball = this.mario.scene.fireballs.get(this);
+      let fireball = this.fireballs.get(this);
       if (fireball) {
         this.fireballs[projectileRecieved.id] = fireball;
-        this.fireballs[projectileRecieved.id].id = projectileRecieved.id; 
+        this.fireballs[projectileRecieved.id].id = projectileRecieved.id;
         fireball.draw(projectileRecieved);
       } else {
         console.error('FAILED TO GET FIREBALL');
@@ -196,7 +197,7 @@ class GameScene extends Phaser.Scene {
         this.fireballs[id].explode(false);
       }
     });
-    socket.on('fireballPickedUp', ({ id, player, x, y}) => {
+    socket.on('fireballPickedUp', ({ id, player, x, y }) => {
       if (this.fireballs[id]) {
         this.fireballs[id].body.reset(x, y);
         this.fireballs[id].pickup(player, false);
@@ -204,16 +205,32 @@ class GameScene extends Phaser.Scene {
     });
 
     socket.on('hitConfirmed', hitInfo => {
-      var timeOnScreen = 5000;
-      var eventText = hitInfo.source + ' pwneo a ' + hitInfo.target;
+      var timeOnScreen = 10000;
+      var eventText = hitInfo.sourceName + ' pwneo a ' + hitInfo.targetName;
       console.log(eventText, this.cameras);
-      var style = { font: '8px Arial', fill: '#ff0044', align: 'right', backgroundColor: '#ffcc99'};
-      
-      var text = this.add.text(eventText.length*2, 10 * this.tweens.getAllTweens().length,eventText, style).setScrollFactor(0,0);      
-      
+      var style = {
+        font: '16px Arial',
+        fill: '#ff0044',
+        align: 'right',
+        backgroundColor: '#ffcc99'
+      };
+
+      var text = this.add
+        .text(
+          eventText.length * 15,
+          20 * this.tweens.getAllTweens().length,
+          eventText,
+          style
+        )
+        .setScrollFactor(0, 0);
+
       text.alpha = 1;
-      this.tweens.add({targets: text, alpha: 0 }, timeOnScreen, 'Linear', true);
-      
+      this.tweens.add(
+        { targets: text, alpha: 0 },
+        timeOnScreen,
+        'Linear',
+        true
+      );
     });
 
     socket.on('updateScore', updatedScore => {
@@ -222,6 +239,15 @@ class GameScene extends Phaser.Scene {
     });
     //Object.values(players).forEach(this.createEnemyPlayer);
     //socket.off('currentPlayers');
+
+    socket.on('playerDeathConfirmed', playerInfo => {
+      if (this.players[playerInfo.id]) {
+        this.players[playerInfo.id].die();
+        this.players[playerInfo.id].playerName.destroy();
+      }
+
+      console.log(playerInfo + ' was eliminated');
+    });
 
     this.fireballs = this.add.group({
       classType: Fire,
@@ -244,7 +270,13 @@ class GameScene extends Phaser.Scene {
     });
 
     //adds other players names
-    this.players[id].playerName = this.add.bitmapText(x, y, 'font', username, 8);
+    this.players[id].playerName = this.add.bitmapText(
+      x,
+      y,
+      'font',
+      username,
+      8
+    );
     this.enemyPlayerGroup.add(this.players[id]);
   }
 
@@ -266,11 +298,12 @@ class GameScene extends Phaser.Scene {
       return;
     }
 
-    // Run the update method of Mario
-    this.mario.update(this.keys, time, delta);
+    // Run the update method of player
+    this.player.update(this.keys, time, delta);
 
-    this.playerName.x = (this.mario.x + (this.mario.width / 2))  - ( this.playerName.width / 2);
-    this.playerName.y = this.mario.y - this.mario.height;
+    this.playerName.x =
+      this.player.x + this.player.width / 2 - this.playerName.width / 2;
+    this.playerName.y = this.player.y - this.player.height;
 
     // Run the update method of all enemies
     this.enemyGroup.children.entries.forEach(sprite => {
@@ -290,7 +323,7 @@ class GameScene extends Phaser.Scene {
   tileCollision(sprite, tile) {
     // If it's Mario and the body isn't blocked up it can't hit question marks or break bricks
     // Otherwise Mario will break bricks he touch from the side while moving up.
-    if (sprite.type === 'mario' && !sprite.body.blocked.up) {
+    if (sprite.type === 'player' && !sprite.body.blocked.up) {
       return;
     }
 
@@ -325,7 +358,7 @@ class GameScene extends Phaser.Scene {
 
         break;
       case 'breakable':
-        if (sprite.type === 'mario' && sprite.animSuffix === '') {
+        if (sprite.type === 'player' && sprite.animSuffix === '') {
           // Can't break it anyway. Bounce it a bit.
           sprite.scene.bounceTile.restart(tile);
           sprite.scene.sound.playAudioSprite('sfx', 'smb_bump');
@@ -439,10 +472,11 @@ class GameScene extends Phaser.Scene {
   }
 
   createHUD() {
-    const hud = this.add.bitmapText(5 * 8, 8, 'font', 'MARIO', 8);
+    const hud = this.add.bitmapText(5 * 8, 8, 'font', 'PLAYER', 8);
     hud.setScrollFactor(0, 0);
+    const points = 0;
     this.score = {
-      pts: 0,
+      pts: points,
       textObject: this.add.bitmapText(5 * 8, 16, 'font', '000000', 8)
     };
     this.score.textObject.setScrollFactor(0, 0);
@@ -502,7 +536,7 @@ class GameScene extends Phaser.Scene {
       'map',
       'tileset',
       'groundLayer',
-      'mario',
+      'player',
       'enemyGroup',
       'powerUps',
       'keys',

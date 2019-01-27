@@ -1,6 +1,6 @@
 import socket from '../helpers/socket';
 
-export default class Mario extends Phaser.GameObjects.Sprite {
+export default class Player extends Phaser.GameObjects.Sprite {
   constructor(config) {
     super(config.scene, config.x, config.y, config.key);
     config.scene.physics.world.enable(this);
@@ -11,6 +11,9 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       this,
       this.collideWithMap.bind(this)
     );
+
+    //We start with 10 points
+    this.score = 10;
 
     this.acceleration = 600;
     this.body.maxVelocity.x = 200;
@@ -31,7 +34,7 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     this.enteringPipe = false;
     this.anims.play('stand');
     this.alive = true;
-    this.type = 'mario';
+    this.type = 'player';
     this.jumpTimer = 0;
     this.jumping = false;
     this.fireCoolDown = 0;
@@ -50,6 +53,7 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     );
 
     this.animSuffix = 'Fire';
+    this.scene.updateScore(this.score);
     //this.scene.sound.playAudioSprite('sfx', 'smb_powerup');
   }
 
@@ -94,11 +98,13 @@ export default class Mario extends Phaser.GameObjects.Sprite {
 
     if (input.fire && this.fireCoolDown < 0) {
       const projectileOwner = socket.id;
+      const projectileOwnerName = this.scene.homeFightUser;
       socket.emit('sendProjectile', {
         x: this.x,
         y: this.y - 2,
         left: this.flipX,
-        projectileOwner
+        projectileOwner,
+        projectileOwnerName
       });
       this.fireCoolDown = 300;
     }
@@ -271,18 +277,44 @@ export default class Mario extends Phaser.GameObjects.Sprite {
   }
 
   die() {
+    this.scene.score = 0;
+    this.score = 0;
     this.scene.music.pause();
     this.play('death');
+    socket.emit('playerDeath', {
+      player: this,
+      id: socket.id
+    });
     this.scene.sound.playAudioSprite('sfx', 'smb_mariodie');
     this.body.setAcceleration(0);
     this.body.setVelocity(0, -300);
     this.alive = false;
+    // this.scene.enemyPlayerGroup.remove(this);
+    this.scene.playerName.destroy();
+    this.destroy();
+
+    //this.scene.time.events.add(Phaser.Timer.SECOND * 5, respawn, this);
   }
 
-  losePoints() {
-    this.scene.music.pause();
-    this.play('death');
-    this.scene.sound.playAudioSprite('sfx', 'smb_mariodie');
+  getHit() {
+    if (this.score <= 1) {
+      this.die();
+    } else {
+      var scorelost = Math.round(this.score / 2);
+      this.score = this.score - scorelost;
+      socket.emit('updatePlayerScore', {
+        player: this
+      });
+      this.losePoints(scorelost);
+    }
+  }
+
+  losePoints(pointsAmount) {
+    this.scene.updateScore(-pointsAmount);
+  }
+
+  respawn() {
+    //TODO: respawn
   }
 
   collideWithMap(sprite, tile) {

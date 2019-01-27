@@ -28,7 +28,7 @@ export default class Goomba extends Enemy {
     }
 
     // Collide with Mario!
-    this.scene.physics.world.overlap(this, this.scene.mario, this.marioHit);
+    this.scene.physics.world.overlap(this, this.scene.player, this.playerHit);
 
     // The Goomba stopped, better try to walk in the other direction.
     if (this.body.velocity.x === 0) {
@@ -37,21 +37,21 @@ export default class Goomba extends Enemy {
     }
   }
 
-  marioHit(enemy, mario) {
-    if (enemy.verticalHit(enemy, mario)) {
+  playerHit(enemy, player) {
+    if (enemy.verticalHit(enemy, player)) {
       // Mario jumps on the enemy
-      mario.enemyBounce(enemy);
+      player.enemyBounce(enemy);
       enemy.scene.sound.playAudioSprite('sfx', 'smb_stomp');
-      enemy.getFlat(enemy, mario);
+      enemy.getFlat(enemy, player);
       // get points
       enemy.scene.updateScore(100);
     } else {
       // Mario collides with the enemy
-      enemy.hurtMario(enemy, mario);
+      enemy.hurtPlayer(enemy, player);
     }
   }
 
-  getFlat(enemy, mario) {
+  getFlat(enemy) {
     enemy.play('goombaFlat');
     enemy.body.setVelocityX(0);
     enemy.body.acceleration.x = 0;

@@ -19,7 +19,7 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
     this.beenSeen = false;
 
     // know about Mario
-    this.mario = this.scene.mario;
+    this.player = this.scene.player;
 
     // Base horizontal velocity / direction.
     this.direction = -50;
@@ -54,20 +54,20 @@ export default class Enemy extends Phaser.GameObjects.Sprite {
     return true;
   }
 
-  verticalHit(enemy, mario) {
+  verticalHit(enemy, player) {
     // quick check if a collision between the enemy and Mario is from above.
-    if (!mario.alive) {
+    if (!player.alive) {
       return false;
     }
     return (
-      mario.body.velocity.y >= 0 &&
-      mario.body.y + mario.body.height - enemy.body.y < 10
+      player.body.velocity.y >= 0 &&
+      player.body.y + player.body.height - enemy.body.y < 10
     );
   }
 
-  hurtMario(enemy, mario) {
+  hurtPlayer(enemy, player) {
     // send the enemy to mario hurt method (if mario got a star this will not end well for the enemy)
-    this.scene.mario.hurtBy(enemy);
+    this.scene.player.hurtBy(enemy);
   }
 
   starKilled() {

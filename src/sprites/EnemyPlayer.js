@@ -48,4 +48,11 @@ export default class EnemyPlayer extends Phaser.GameObjects.Sprite {
       this.anims.play(anim);
     }
   }
+
+  die() {
+    this.alive = false;
+    this.scene.enemyPlayerGroup.remove(this);
+    this.destroy();
+  }
+
 }
