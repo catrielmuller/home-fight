@@ -1,9 +1,20 @@
 import socket from '../helpers/socket';
 
 export default class Fire extends Phaser.GameObjects.Sprite {
+  clean() {
+    console.log('init!');
+    this.setActive(true);
+    this.setVisible(true);
+    this.bounce = 0;
+    this.pickable = false;
+    this.exploding = false;
+    this.body.allowGravity = true;
+    this.body.velocity.y = 0;
+    this.body.velocity.x = 0;
+  }
+
   constructor(scene) {
     super(scene);
-    this.exploding = false;
     // super(config.scene, config.x, config.y, config.key);
 
     /* switch(config.type) {
@@ -23,16 +34,15 @@ export default class Fire extends Phaser.GameObjects.Sprite {
         if (this.anims.currentAnim.key === 'fireExplode') {
           this.setActive(false);
           this.setVisible(false);
-          this.exploding = false;
         }
       },
       this
     );
+    this.clean();
   }
 
   draw(projectileRecieved) {
-    this.setActive(true);
-    this.setVisible(true);
+    this.clean();
     // this.scene.add.existing(this);
     this.body.allowGravity = true;
     this.owner = projectileRecieved.projectileOwner;
@@ -55,8 +65,14 @@ export default class Fire extends Phaser.GameObjects.Sprite {
         this.scene.mario,
         (fire, mario) => {
           if (socket.id === fire.owner) {
+            if (this.bounce >= 1) {
+              this.pickup(socket.id);
+            }
             return;
+          } else if (this.pickable) {
+            this.pickup(socket.id);
           }
+
           console.log('colision! ', fire, mario);
           socket.emit('hit', {
             source: fire.owner,
@@ -79,12 +95,26 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     }
   }
 
+  pickup(player) {
+    console.log('Picked up by', player);
+    this.setActive(false);
+    this.setVisible(false);
+  }
+
   collided() {
-    if (this.body.velocity.y === 0) {
-      this.body.velocity.y = -150;
+    if (this.pickable) {
+      return;
     }
-    if (this.body.velocity.x === 0) {
-      this.explode();
+    if (this.body.velocity.y === 0) {
+      if (this.bounce < 3) {
+        this.bounce += 1;
+        this.body.velocity.y = -150 / this.bounce;
+        this.body.velocity.x /= 2;
+      } else {
+        this.pickable = true;
+        this.body.setAcceleration(0, 0);
+        this.body.setVelocity(0, 0);
+      }
     }
   }
 

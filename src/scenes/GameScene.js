@@ -146,6 +146,7 @@ class GameScene extends Phaser.Scene {
     );
     // Get players
     this.players = {};
+    this.fireballs = {};
     socket.on('currentPlayers', players => {
       console.log('Yay! Players obtenidos', players);
       Object.values(players).forEach(this.createEnemyPlayer);
@@ -178,7 +179,14 @@ class GameScene extends Phaser.Scene {
     socket.on('broadcastProjectile', projectileRecieved => {
       let fireball = this.mario.scene.fireballs.get(this);
       if (fireball) {
+        this.fireballs[projectileRecieved.id] = fireball;
         fireball.draw(projectileRecieved);
+      }
+    });
+
+    socket.on('fireballRemoved', ({ id, type }) => {
+      if (this.fireballs[id]) {
+        this.fireballs[id].fireballRemove({ id, type });
       }
     });
 
@@ -204,7 +212,7 @@ class GameScene extends Phaser.Scene {
 
     this.fireballs = this.add.group({
       classType: Fire,
-      maxSize: 10,
+      maxSize: 1000,
       runChildUpdate: false // Due to https://github.com/photonstorm/phaser/issues/3724
     });
   }
