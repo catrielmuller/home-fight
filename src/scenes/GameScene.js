@@ -127,8 +127,8 @@ class GameScene extends Phaser.Scene {
     this.physics.world.resume();
 
     // CREATE MARIO!!!
-    this.bullets = 0;
     this.player = new Player({
+      bullets: 7,
       scene: this,
       key: 'player',
       x: 16 * 6,
@@ -177,12 +177,20 @@ class GameScene extends Phaser.Scene {
     socket.on('playerBullet', player => {
       const { id, bullets } = player;
       if (socket.id === id) {
-        this.bullets = bullets;
-        console.log('bullets', this.bullets);
+        this.player.bullets = bullets;
+        console.log('bullets', this.player.bullets);
+        if (this.player.bullets < 0) {
+          this.player.die();
+        }
+      } else {
+        this.players[id].bullets = bullets;
       }
     });
 
-    socket.emit('initPlayer', { username: this.homeFightUser });
+    socket.emit('initPlayer', {
+      username: this.homeFightUser,
+      bullets: this.player.bullets
+    });
 
     // The camera should follow Mario
     this.cameras.main.startFollow(this.player);
@@ -267,15 +275,14 @@ class GameScene extends Phaser.Scene {
 
   createEnemyPlayer(player) {
     const { x, y, r, id, username, bullets } = player;
-    if (socket.id === id) {
-      this.bullets = bullets;
-    }
     this.players[id] = new EnemyPlayer({
+      bullets,
       id,
       scene: this,
       key: 'mario',
       x,
-      y
+      y,
+      r
     });
 
     //adds other players names
@@ -327,6 +334,10 @@ class GameScene extends Phaser.Scene {
     this.powerUps.children.entries.forEach(sprite => {
       sprite.update(time, delta);
     });
+
+    this.bullets.textObject.setText(
+      ('' + this.player.bullets).padStart(6, '0')
+    );
   }
 
   tileCollision(sprite, tile) {
@@ -419,8 +430,12 @@ class GameScene extends Phaser.Scene {
     } */
 
   updateScore(score) {
-    this.score.pts += score;
-    this.score.textObject.setText(('' + this.score.pts).padStart(6, '0'));
+    // Remove
+  }
+
+  updateBullets() {
+    this.bullets.value = this.player.bullets;
+    this.bullets.textObject.setText(('' + this.bullets.value).padStart(6, '0'));
   }
 
   parseObjectLayers() {
@@ -481,14 +496,12 @@ class GameScene extends Phaser.Scene {
   }
 
   createHUD() {
-    const hud = this.add.bitmapText(5 * 8, 8, 'font', 'PLAYER', 8);
+    const hud = this.add.bitmapText(5 * 8, 8, 'font', 'CANDY', 24);
     hud.setScrollFactor(0, 0);
-    const points = 0;
-    this.score = {
-      pts: points,
-      textObject: this.add.bitmapText(5 * 8, 16, 'font', '000000', 8)
+    this.bullets = {
+      textObject: this.add.bitmapText(5 * 8, 8 + 30, 'font', '000000', 24)
     };
-    this.score.textObject.setScrollFactor(0, 0);
+    this.bullets.textObject.setScrollFactor(0, 0);
   }
 
   cleanUp() {

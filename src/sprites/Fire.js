@@ -83,7 +83,6 @@ export default class Fire extends Phaser.GameObjects.Sprite {
             targetName: player.scene.homeFightUser
           });
           this.explode();
-          player.getHit();
         }
       );
     }
