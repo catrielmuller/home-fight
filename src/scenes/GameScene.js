@@ -106,6 +106,7 @@ class GameScene extends Phaser.Scene {
     });
 
     this.createHUD();
+    this.createHighscores();
 
     // Prepare the finishLine
     let worldEndAt = -1;
@@ -225,7 +226,7 @@ class GameScene extends Phaser.Scene {
         this.fireballs[id].pickup(player, false);
       }
     });
-    
+
     socket.on('spawnBullet', spawnInfo => {
       //console.log("DIBUJAR BOLITA EN ",spawnInfo)
       let fireball = this.fireballs.get(this);
@@ -237,7 +238,7 @@ class GameScene extends Phaser.Scene {
         console.error('FAILED TO GET FIREBALL');
       }
     });
-      
+
     socket.on('hitConfirmed', hitInfo => {
       var timeOnScreen = 3000;
       var eventText = hitInfo.sourceName + ' pwneo a ' + hitInfo.targetName;
@@ -269,7 +270,7 @@ class GameScene extends Phaser.Scene {
 
     socket.on('updateScore', updatedScore => {
       //TODO: Actualizar puntaje
-      console.log(updatedScore);
+      this.updateHighscores(updatedScore);
     });
     //Object.values(players).forEach(this.createEnemyPlayer);
     //socket.off('currentPlayers');
@@ -520,11 +521,42 @@ class GameScene extends Phaser.Scene {
     this.bullets.textObject.setScrollFactor(0, 0);
   }
 
+  createHighscores() {
+    this.highscores = [];
+    this.highscoresTitle = this.add
+      .bitmapText(900, 8 + 30, 'font', 'HIGHSCORES', 24)
+      .setScrollFactor(0, 0);
+
+    for (var i = 0; i < 10; i++) {
+      this.highscores[i] = this.add
+        .text(800, 80 + 24 * i, '', {
+          fontFamily: 'Courier',
+          fontSize: 20,
+          color: '#00ff00',
+          backgroundColor: '#0000007f'
+        })
+        .setScrollFactor(0, 0);
+    }
+  }
+
+  updateHighscores(scores) {
+    for (let i = 0; i < this.highscores.length; i++) {
+      if (scores.length > i) {
+        const { username, kills, bullets } = scores[i];
+        this.highscores[i].setText(
+          `${String(i + 1 + '.').padStart(3, ' ')} ${username.padEnd(
+            15,
+            ' '
+          )} kill:${String(kills).padEnd(3, ' ')} candy:${String(
+            bullets
+          ).padEnd(3, ' ')}`
+        );
+      }
+    }
+  }
   respawnPlayer(player) {
-    
     player.destroy();
     location.reload(true);
-
   }
 
   cleanUp() {
