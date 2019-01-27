@@ -1,15 +1,16 @@
 import 'phaser';
 import BootScene from './scenes/BootScene';
 import GameScene from './scenes/GameScene';
+import SelectScene from './scenes/SelectScene';
 
 const config = {
   type: Phaser.WEBGL,
   pixelArt: true,
   roundPixels: true,
   parent: 'content',
-  width: 400,
-  height: 240,
-  zoom: 10,
+  width: 1280,
+  height: 720,
+  zoom: 2,
   autoResize: true,
   physics: {
     default: 'arcade',
@@ -20,7 +21,9 @@ const config = {
       debug: false
     }
   },
-  scene: [BootScene, GameScene]
+  plugins: {
+  },
+  scene: [BootScene, SelectScene, GameScene]
 };
 
 const game = new Phaser.Game(config); // eslint-disable-line no-unused-vars

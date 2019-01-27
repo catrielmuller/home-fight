@@ -26,7 +26,7 @@ class BootScene extends Phaser.Scene {
       // prepare all animations, defined in a separate file
       makeAnimations(this);
       progress.destroy();
-      this.scene.start('GameScene');
+      this.scene.start('SelectScene');
     });
 
     this.load.image('background-clouds', 'assets/images/clouds.png'); // 16-bit later
