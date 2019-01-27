@@ -43,6 +43,7 @@ class SelectScene extends Phaser.Scene {
       }
       localStorage.setItem('home-fight-user', this.text);
       this.scene.start('GameScene');
+      window.removeEventListener('keydown', this.keyEvent);
       return;
     }
     if(event.key === 'Backspace'){
