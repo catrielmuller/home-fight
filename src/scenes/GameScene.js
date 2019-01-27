@@ -107,7 +107,7 @@ class GameScene extends Phaser.Scene {
       scene: this
     });
 
-    this.cameras.main.setZoom(0.5);
+    this.cameras.main.setZoom(0.6);
     this.createHUD();
     this.createHighscores();
 
@@ -145,12 +145,18 @@ class GameScene extends Phaser.Scene {
     });
 
     //adds player name
-    this.playerName = this.add.bitmapText(
+    this.playerName = this.add.text(
       this.player.x,
       this.player.y,
-      'font',
       this.homeFightUser,
-      8
+      {
+        fontSize: 48,
+        fontWeight: 'bold',
+        stroke: '#000000',
+        strokeThickness: 5,
+        fill: '#fff',
+        active: true
+      }
     );
 
     // Get players
@@ -175,11 +181,9 @@ class GameScene extends Phaser.Scene {
       if (this.players[id]) {
         this.players[id].move(player);
         this.players[id].playerName.x =
-          this.players[id].x +
-          this.players[id].width / 2 -
-          this.players[id].playerName.width / 2;
+          this.players[id].x - this.players[id].playerName.width / 2;
         this.players[id].playerName.y =
-          this.players[id].y - this.players[id].height;
+          this.players[id].y - (this.players[id].height / 2);
       }
     });
 
@@ -341,8 +345,8 @@ class GameScene extends Phaser.Scene {
     this.player.update(this.keys, time, delta);
 
     this.playerName.x =
-      this.player.x + this.player.width / 2 - this.playerName.width / 2;
-    this.playerName.y = this.player.y - this.player.height;
+      this.player.x - this.playerName.width / 2;
+    this.playerName.y = this.player.y - (this.player.height / 2);
 
     // Run the update method of all enemies
     this.enemyGroup.children.entries.forEach(sprite => {
@@ -519,21 +523,21 @@ class GameScene extends Phaser.Scene {
   } 
 
   createHUD() {
-    const hud = this.add.text(20, 20, 'CANDIES', {
-      fontSize: 24,
+    const hud = this.add.text(-350, -180, 'CANDIES', {
+      fontSize: 64,
       fontWeight: 'bold',
       stroke: '#000000',
-      strokeThickness: 3,
+      strokeThickness: 6,
       fill: '#fff',
       active: true
     });
     hud.setScrollFactor(0, 0);
     this.bullets = {
-      textObject: this.add.text(20, 20 + 30, '000000', {
-        fontSize: 24,
+      textObject: this.add.text(-350, -180 + 70, '000000', {
+        fontSize: 64,
         fontWeight: 'bold',
         stroke: '#000000',
-        strokeThickness: 3,
+        strokeThickness: 6,
         fill: '#fff',
         active: true
       })
@@ -544,14 +548,21 @@ class GameScene extends Phaser.Scene {
   createHighscores() {
     this.highscores = [];
     this.highscoresTitle = this.add
-      .bitmapText(900, 8 + 30, 'font', 'HIGHSCORES', 24)
+      .text(1100, -180, 'HIGHSCORES', {
+        fontSize: 64,
+        fontWeight: 'bold',
+        stroke: '#000000',
+        strokeThickness: 6,
+        fill: '#fff',
+        active: true
+      })
       .setScrollFactor(0, 0);
 
     for (var i = 0; i < 10; i++) {
       this.highscores[i] = this.add
-        .text(800, 80 + 24 * i, '', {
+        .text(800, -100 + 32 * i, '', {
           fontFamily: 'Courier',
-          fontSize: 20,
+          fontSize: 32,
           color: '#00ff00',
           backgroundColor: '#0000007f'
         })
