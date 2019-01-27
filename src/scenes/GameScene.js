@@ -44,6 +44,7 @@ class GameScene extends Phaser.Scene {
 
     // Dynamic layer because we want breakable and animated tiles
     this.groundLayer = this.map.createDynamicLayer('world', this.tileset, 0, 0);
+    this.groundLayer.setAlpha(0);
 
     // We got the map. Tell animated tiles plugin to loop through the tileset properties and get ready.
     // We don't need to do anything beyond this point for animated tiles to work.
