@@ -31,7 +31,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       step: 0
     };
     this.enteringPipe = false;
-    this.anims.play('stand');
+    this.anims.play('player-pv-idle');
     this.alive = true;
     this.type = 'player';
     this.jumpTimer = 0;
@@ -155,42 +155,47 @@ export default class Player extends Phaser.GameObjects.Sprite {
     let anim = null;
     if (this.body.velocity.y !== 0) {
       anim = 'jump';
+      anim = 'player-pv-idle';
     } else if (this.body.velocity.x !== 0) {
-      anim = 'run';
+      anim = 'player-pv-run';
       if (
         (input.left || input.right) &&
         ((this.body.velocity.x > 0 && this.body.acceleration.x < 0) ||
           (this.body.velocity.x < 0 && this.body.acceleration.x > 0))
       ) {
         anim = 'turn';
+        anim = 'player-pv-idle';
       } else if (
         this.animSuffix !== '' &&
         input.down &&
         !(input.right || input.left)
       ) {
         anim = 'bend';
+        anim = 'player-pv-idle';
       }
     } else {
-      anim = 'stand';
+      anim = 'player-pv-idle';
       if (
         this.animSuffix !== '' &&
         input.down &&
         !(input.right || input.left)
       ) {
-        anim = 'bend';
+        anim = 'player-pv-idle';
       }
     }
 
-    anim += this.animSuffix;
+    //anim += this.animSuffix;
     if (
       this.anims.currentAnim.key !== anim &&
       !this.scene.physics.world.isPaused
     ) {
+      console.log('anim', anim);
       this.anims.play(anim);
     }
 
     this.physicsCheck = true;
     const { x, y, flipX } = this;
+    console.log('position', x + '   ' + y);
     socket.emit('move', {
       anim: anim,
       velx: this.body.velocity.x,
@@ -250,13 +255,13 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   small() {
-    this.body.setSize(10, 10);
-    this.body.offset.set(3, 6);
+    this.body.setSize(105, 180);
+    this.body.offset.set(25, 85);
   }
 
   large() {
-    this.body.setSize(10, 14);
-    this.body.offset.set(3, 15);
+    this.body.setSize(105, 180);
+    this.body.offset.set(25, 85);
   }
 
   die() {

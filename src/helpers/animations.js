@@ -282,4 +282,50 @@ export default function makeAnimations(scene) {
     };
 
     scene.anims.create(config);
+
+
+    // Own animations
+    config = {
+        key: 'candy-fire',
+        frames: scene.anims.generateFrameNames('sprites', {
+            prefix: 'candies/fire',
+            start: 1,
+            end: 4
+        }),
+        frameRate: 10,
+        repeat: -1,
+        repeatDelay: 0
+    };
+    scene.anims.create(config);
+
+
+    config = {
+        key: 'player-pv-run',
+        frames: scene.anims.generateFrameNames('sprites', {
+            prefix: 'pv/run',
+            start: 1,
+            end: 7
+        }),
+        frameRate: 15,
+        repeat: -1,
+        repeatDelay: 0
+    };
+    scene.anims.create(config);
+
+    config = {
+        key: 'player-pv-idle',
+        frames: scene.anims.generateFrameNames('sprites', {
+            prefix: 'pv/idle',
+            start: 1,
+            end: 12
+        }),
+        frameRate: 10,
+        repeat: -1,
+        repeatDelay: 0
+    };
+    scene.anims.create(config);
+
+
+
+
 }
