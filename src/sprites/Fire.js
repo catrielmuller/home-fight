@@ -32,7 +32,7 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     this.on(
       'animationcomplete',
       () => {
-        if (this.anims.currentAnim.key === 'fireExplode') {
+        if (this.anims.currentAnim.key === 'candy-explode') {
           this.setActive(false);
           this.setVisible(false);
         }
@@ -49,7 +49,7 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     this.ownerName = projectileRecieved.projectileOwnerName;
     this.setPosition(projectileRecieved.x, projectileRecieved.y);
     this.body.velocity.x = 1700 * (projectileRecieved.left ? -1 : 1);
-    this.play('fireFly');
+    this.play('candy-fire');
     this.scene.sound.playAudioSprite('sfx', 'smb_fireball');
   }
 
@@ -60,7 +60,7 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     const { velX = 0, velY = 0 } = projectileRecieved;
     this.body.reset(projectileRecieved.x, projectileRecieved.y);
     this.body.setVelocity(velX, velY);
-    this.play('fireFly');
+    this.play('candy-fire');
     this.pickable = true;
   }
 
@@ -140,7 +140,7 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     this.body.allowGravity = false;
     this.body.velocity.y = 0;
     this.body.velocity.x = 0;
-    this.play('fireExplode');
+    this.play('candy-explode');
     if (broadcast) {
       socket.emit('fireballExploded', {
         id: this.id,

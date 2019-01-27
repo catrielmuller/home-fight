@@ -298,6 +298,28 @@ export default function makeAnimations(scene) {
     };
     scene.anims.create(config);
 
+    config = {
+        key: 'candy-explode',
+        frames: scene.anims.generateFrameNames('sprites', {
+            prefix: 'candies/fire',
+            start: 1,
+            end: 4
+        }),
+        frameRate: 10,
+        repeat: 0,
+        repeatDelay: 0
+    };
+    scene.anims.create(config);
+
+    config = {
+        key: 'candy-stop',
+        frames: [{
+            frame: 'candies/fire1',
+            key: 'sprites'
+        }]
+    };
+    scene.anims.create(config);
+
 
     config = {
         key: 'player-pv-run',
