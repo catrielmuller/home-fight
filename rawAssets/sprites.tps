@@ -9,7 +9,7 @@
         <array>
             <struct type="AutoSDSettings">
                 <key>scale</key>
-                <double>0.5</double>
+                <double>1</double>
                 <key>extension</key>
                 <string></string>
                 <key>spriteFilter</key>
@@ -181,210 +181,86 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
-            <key type="filename">sprites/brick.png</key>
+            <key type="filename">sprites/candies/fire1.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>2,1,5,3</rect>
+                <rect>16,14,31,27</rect>
                 <key>scale9Paddings</key>
-                <rect>2,1,5,3</rect>
+                <rect>16,14,31,27</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">sprites/coin/coin1.png</key>
-            <key type="filename">sprites/coin/coin2.png</key>
-            <key type="filename">sprites/coin/coin3.png</key>
-            <key type="filename">sprites/coin/spin1.png</key>
-            <key type="filename">sprites/coin/spin2.png</key>
-            <key type="filename">sprites/coin/spin3.png</key>
-            <key type="filename">sprites/coin/spin4.png</key>
+            <key type="filename">sprites/candies/fire2.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>3,4,5,7</rect>
+                <rect>14,13,29,27</rect>
                 <key>scale9Paddings</key>
-                <rect>3,4,5,7</rect>
+                <rect>14,13,29,27</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">sprites/controller/button.png</key>
+            <key type="filename">sprites/candies/fire3.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>11,10,21,21</rect>
+                <rect>8,10,17,19</rect>
                 <key>scale9Paddings</key>
-                <rect>11,10,21,21</rect>
+                <rect>8,10,17,19</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">sprites/controller/dpad.png</key>
+            <key type="filename">sprites/candies/fire4.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>19,19,37,37</rect>
+                <rect>11,12,23,25</rect>
                 <key>scale9Paddings</key>
-                <rect>19,19,37,37</rect>
+                <rect>11,12,23,25</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
-            <key type="filename">sprites/fire/explode1.png</key>
-            <key type="filename">sprites/fire/explode2.png</key>
-            <key type="filename">sprites/fire/explode3.png</key>
-            <key type="filename">sprites/flag.png</key>
-            <key type="filename">sprites/goomba/flat.png</key>
-            <key type="filename">sprites/goomba/walk1.png</key>
-            <key type="filename">sprites/goomba/walk2.png</key>
-            <key type="filename">sprites/mario/bend.png</key>
-            <key type="filename">sprites/mario/climb0.png</key>
-            <key type="filename">sprites/mario/climb1.png</key>
-            <key type="filename">sprites/mario/dead.png</key>
-            <key type="filename">sprites/mario/jump.png</key>
-            <key type="filename">sprites/mario/stand.png</key>
-            <key type="filename">sprites/mario/swim1.png</key>
-            <key type="filename">sprites/mario/swim2.png</key>
-            <key type="filename">sprites/mario/swim3.png</key>
-            <key type="filename">sprites/mario/swim4.png</key>
-            <key type="filename">sprites/mario/swim5.png</key>
-            <key type="filename">sprites/mario/turn.png</key>
-            <key type="filename">sprites/mario/walk1.png</key>
-            <key type="filename">sprites/mario/walk2.png</key>
-            <key type="filename">sprites/mario/walk3.png</key>
-            <key type="filename">sprites/powerup/1up.png</key>
-            <key type="filename">sprites/powerup/flower1.png</key>
-            <key type="filename">sprites/powerup/flower2.png</key>
-            <key type="filename">sprites/powerup/flower3.png</key>
-            <key type="filename">sprites/powerup/flower4.png</key>
-            <key type="filename">sprites/powerup/star1.png</key>
-            <key type="filename">sprites/powerup/star2.png</key>
-            <key type="filename">sprites/powerup/star3.png</key>
-            <key type="filename">sprites/powerup/star4.png</key>
-            <key type="filename">sprites/powerup/super.png</key>
+            <key type="filename">sprites/pv/idle1.png</key>
+            <key type="filename">sprites/pv/idle10.png</key>
+            <key type="filename">sprites/pv/idle11.png</key>
+            <key type="filename">sprites/pv/idle12.png</key>
+            <key type="filename">sprites/pv/idle2.png</key>
+            <key type="filename">sprites/pv/idle3.png</key>
+            <key type="filename">sprites/pv/idle4.png</key>
+            <key type="filename">sprites/pv/idle5.png</key>
+            <key type="filename">sprites/pv/idle6.png</key>
+            <key type="filename">sprites/pv/idle7.png</key>
+            <key type="filename">sprites/pv/idle8.png</key>
+            <key type="filename">sprites/pv/idle9.png</key>
+            <key type="filename">sprites/pv/run1.png</key>
+            <key type="filename">sprites/pv/run2.png</key>
+            <key type="filename">sprites/pv/run3.png</key>
+            <key type="filename">sprites/pv/run4.png</key>
+            <key type="filename">sprites/pv/run5.png</key>
+            <key type="filename">sprites/pv/run6.png</key>
+            <key type="filename">sprites/pv/run7.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
                 <point_f>0.5,0.5</point_f>
                 <key>scale9Enabled</key>
                 <false/>
                 <key>scale9Borders</key>
-                <rect>4,4,8,8</rect>
+                <rect>38,80,75,160</rect>
                 <key>scale9Paddings</key>
-                <rect>4,4,8,8</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">sprites/fire/fly1.png</key>
-            <key type="filename">sprites/fire/fly2.png</key>
-            <key type="filename">sprites/fire/fly3.png</key>
-            <key type="filename">sprites/fire/fly4.png</key>
-            <key type="filename">sprites/other/cloud.png</key>
-            <key type="filename">sprites/other/platform.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>2,2,4,4</rect>
-                <key>scale9Paddings</key>
-                <rect>2,2,4,4</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">sprites/mario/bendFire.png</key>
-            <key type="filename">sprites/mario/bendSuper.png</key>
-            <key type="filename">sprites/mario/climbFire0.png</key>
-            <key type="filename">sprites/mario/climbFire1.png</key>
-            <key type="filename">sprites/mario/climbSuper0.png</key>
-            <key type="filename">sprites/mario/climbSuper1.png</key>
-            <key type="filename">sprites/mario/fire.png</key>
-            <key type="filename">sprites/mario/half.png</key>
-            <key type="filename">sprites/mario/jumpFire.png</key>
-            <key type="filename">sprites/mario/jumpSuper.png</key>
-            <key type="filename">sprites/mario/standFire.png</key>
-            <key type="filename">sprites/mario/standSuper.png</key>
-            <key type="filename">sprites/mario/swimFire1.png</key>
-            <key type="filename">sprites/mario/swimFire2.png</key>
-            <key type="filename">sprites/mario/swimFire3.png</key>
-            <key type="filename">sprites/mario/swimFire4.png</key>
-            <key type="filename">sprites/mario/swimFire5.png</key>
-            <key type="filename">sprites/mario/swimFire6.png</key>
-            <key type="filename">sprites/mario/swimSuper1.png</key>
-            <key type="filename">sprites/mario/swimSuper2.png</key>
-            <key type="filename">sprites/mario/swimSuper3.png</key>
-            <key type="filename">sprites/mario/swimSuper4.png</key>
-            <key type="filename">sprites/mario/swimSuper5.png</key>
-            <key type="filename">sprites/mario/swimSuper6.png</key>
-            <key type="filename">sprites/mario/turnFire.png</key>
-            <key type="filename">sprites/mario/turnSuper.png</key>
-            <key type="filename">sprites/mario/walkFire1.png</key>
-            <key type="filename">sprites/mario/walkFire2.png</key>
-            <key type="filename">sprites/mario/walkFire3.png</key>
-            <key type="filename">sprites/mario/walkSuper1.png</key>
-            <key type="filename">sprites/mario/walkSuper2.png</key>
-            <key type="filename">sprites/mario/walkSuper3.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>4,8,8,16</rect>
-                <key>scale9Paddings</key>
-                <rect>4,8,8,16</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">sprites/other/trampoline1.png</key>
-            <key type="filename">sprites/other/trampoline2.png</key>
-            <key type="filename">sprites/other/trampoline3.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>4,8,8,15</rect>
-                <key>scale9Paddings</key>
-                <rect>4,8,8,15</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">sprites/title.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>44,22,88,44</rect>
-                <key>scale9Paddings</key>
-                <rect>44,22,88,44</rect>
-                <key>scale9FromFile</key>
-                <false/>
-            </struct>
-            <key type="filename">sprites/turtle/shell.png</key>
-            <key type="filename">sprites/turtle/turtle0.png</key>
-            <key type="filename">sprites/turtle/turtle1.png</key>
-            <struct type="IndividualSpriteSettings">
-                <key>pivotPoint</key>
-                <point_f>0.5,0.5</point_f>
-                <key>scale9Enabled</key>
-                <false/>
-                <key>scale9Borders</key>
-                <rect>4,6,8,12</rect>
-                <key>scale9Paddings</key>
-                <rect>4,6,8,12</rect>
+                <rect>38,80,75,160</rect>
                 <key>scale9FromFile</key>
                 <false/>
             </struct>
