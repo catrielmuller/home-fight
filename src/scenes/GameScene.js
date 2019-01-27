@@ -28,6 +28,7 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
+    this.physics.world.gravity.y = 1300;
     this.homeFightUser = localStorage.getItem('home-fight-user');
     this.eightBit = true;
     // Add and play the music
@@ -150,7 +151,7 @@ class GameScene extends Phaser.Scene {
       this.player.y,
       this.homeFightUser,
       {
-        fontSize: 48,
+        fontSize: 60,
         fontWeight: 'bold',
         stroke: '#000000',
         strokeThickness: 5,
@@ -245,16 +246,22 @@ class GameScene extends Phaser.Scene {
         console.error('FAILED TO GET FIREBALL');
       }
     });
-      
-    socket.on('hitConfirmed', ({ hitInfo,bulletsDiff }) => {
+
+    socket.on('hitConfirmed', ({ hitInfo, bulletsDiff }) => {
       var timeOnScreen = 3000;
-      var eventText = hitInfo.sourceName + ' golpeo a ' + hitInfo.targetName + " por " + bulletsDiff + "!";
-      if(this.players[hitInfo.target]){
+      var eventText =
+        hitInfo.sourceName +
+        ' golpeo a ' +
+        hitInfo.targetName +
+        ' por ' +
+        bulletsDiff +
+        '!';
+      if (this.players[hitInfo.target]) {
         this.players[hitInfo.target].getHurt();
       }
       console.log(eventText, this.cameras);
       var style = {
-        font: '16px Arial',
+        font: '48px Arial',
         fill: '#ff0044',
         align: 'right',
         backgroundColor: '#ffcc99'
@@ -520,7 +527,7 @@ class GameScene extends Phaser.Scene {
         break;
       }
     });
-  } 
+  }
 
   createHUD() {
     const hud = this.add.text(-350, -180, 'CANDIES', {

@@ -12,9 +12,9 @@ export default class Player extends Phaser.GameObjects.Sprite {
       this.collideWithMap.bind(this)
     );
 
-    this.acceleration = 600;
-    this.body.maxVelocity.x = 200;
-    this.body.maxVelocity.y = 500;
+    this.acceleration = 2400;
+    this.body.maxVelocity.x = 800;
+    this.body.maxVelocity.y = 1000;
     this.animSuffix = '';
     this.bullets = config.bullets;
     this.respawnCount = 5;
@@ -133,7 +133,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
       this.flipX = false;
     } else if (this.body.blocked.down) {
-      if (Math.abs(this.body.velocity.x) < 10) {
+      if (Math.abs(this.body.velocity.x) < 20) {
         this.body.setVelocityX(0);
         this.run(0);
       } else {
@@ -195,7 +195,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     this.physicsCheck = true;
     const { x, y, flipX } = this;
-    console.log('position', x + '   ' + y);
+    // console.log('position', x + '   ' + y);
     socket.emit('move', {
       anim: anim,
       velx: this.body.velocity.x,
@@ -225,7 +225,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
       }
     }
     if (this.body.velocity.y < 0 || this.body.blocked.down) {
-      this.body.setVelocityY(-200);
+      this.body.setVelocityY(-600);
     }
     if (!this.jumping) {
       this.jumpTimer = 300;
@@ -297,27 +297,28 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   getHurt(fireTouch) {
-    if(this.isHurt){ 
-      return
+    if (this.isHurt) {
+      return;
     } else {
       this.isHurt = true;
       let finalAcelX = 0;
       let finalAcelY = 0;
-      if(fireTouch.right) finalAcelX =200
-      if(fireTouch.left) finalAcelX =-200
+      if (fireTouch.right) finalAcelX = 600;
+      if (fireTouch.left) finalAcelX = -600;
 
       this.body.setVelocityX(finalAcelX);
-      var tween = this.scene.tweens.add({ targets: this, alpha: 0, duration: 200, yoyo: true, loop:-1  },
-          1900,
-          'Linear',
-          true
-        );
-      setTimeout(this.finishHurting,2000, this, tween)
-    }    
+      var tween = this.scene.tweens.add(
+        { targets: this, alpha: 0, duration: 200, yoyo: true, loop: -1 },
+        1900,
+        'Linear',
+        true
+      );
+      setTimeout(this.finishHurting, 2000, this, tween);
+    }
   }
 
-  finishHurting(player, tween){
-    console.log("invencibility has finished")
+  finishHurting(player, tween) {
+    console.log('invencibility has finished');
     player.isHurt = false;
     tween.stop();
     player.alpha = 1;
