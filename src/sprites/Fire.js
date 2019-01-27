@@ -87,12 +87,18 @@ export default class Fire extends Phaser.GameObjects.Sprite {
           }
 
           console.log('colision! ', fire, player);
-          socket.emit('hit', {
-            source: fire.owner,
-            sourceName: fire.ownerName,
-            target: socket.id,
-            targetName: player.scene.homeFightUser
-          });
+          //Check for Inv.Frames on the player after geting hit.
+          if(!player.isHurt){
+            socket.emit('hit', {
+              source: fire.owner,
+              sourceName: fire.ownerName,
+              target: socket.id,
+              targetName: player.scene.homeFightUser
+            });
+            console.log("I got hurt", player, fire)
+            this.scene.player.getHurt(fire.body.touching);
+          }
+          
           this.explode();
         }
       );
