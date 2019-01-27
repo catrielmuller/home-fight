@@ -185,6 +185,8 @@ class GameScene extends Phaser.Scene {
         this.fireballs[projectileRecieved.id] = fireball;
         this.fireballs[projectileRecieved.id].id = projectileRecieved.id; 
         fireball.draw(projectileRecieved);
+      } else {
+        console.error('FAILED TO GET FIREBALL');
       }
     });
 
@@ -203,14 +205,14 @@ class GameScene extends Phaser.Scene {
 
     socket.on('hitConfirmed', hitInfo => {
       var timeOnScreen = 5000;
-      var eventText = hitInfo.source + ' pwneo a ' + hitInfo.target
+      var eventText = hitInfo.source + ' pwneo a ' + hitInfo.target;
       console.log(eventText, this.cameras);
-      var style = { font: "8px Arial", fill: "#ff0044", align: "right", backgroundColor: "#ffcc99"};
+      var style = { font: '8px Arial', fill: '#ff0044', align: 'right', backgroundColor: '#ffcc99'};
       
       var text = this.add.text(eventText.length*2, 10 * this.tweens.getAllTweens().length,eventText, style).setScrollFactor(0,0);      
       
       text.alpha = 1;
-      this.tweens.add({targets: text, alpha: 0 }, timeOnScreen, "Linear", true)
+      this.tweens.add({targets: text, alpha: 0 }, timeOnScreen, 'Linear', true);
       
     });
 

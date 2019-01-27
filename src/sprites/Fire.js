@@ -3,8 +3,8 @@ import socket from '../helpers/socket';
 export default class Fire extends Phaser.GameObjects.Sprite {
   clean() {
     console.log('init!');
-    this.setActive(true);
     this.setVisible(true);
+    this.setActive(true);
     this.bounce = 0;
     this.pickable = false;
     this.exploding = false;
@@ -70,6 +70,7 @@ export default class Fire extends Phaser.GameObjects.Sprite {
             return;
           } else if (this.pickable) {
             this.pickup(socket.id);
+            return;
           }
 
           console.log('colision! ', fire, mario);
