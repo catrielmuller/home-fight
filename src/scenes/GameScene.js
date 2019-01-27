@@ -44,6 +44,7 @@ class GameScene extends Phaser.Scene {
 
     // Dynamic layer because we want breakable and animated tiles
     this.groundLayer = this.map.createDynamicLayer('world', this.tileset, 0, 0);
+    this.groundLayer.setAlpha(0);
 
     // We got the map. Tell animated tiles plugin to loop through the tileset properties and get ready.
     // We don't need to do anything beyond this point for animated tiles to work.
@@ -53,7 +54,8 @@ class GameScene extends Phaser.Scene {
     this.physics.world.bounds.width = this.groundLayer.width;
 
     // Add the background as an tilesprite.
-    this.add.tileSprite(0, 0, this.groundLayer.width, 500, 'background-clouds');
+    this.bg = this.add.tileSprite(4163, 682, 4163, 682, 'background');
+    this.bg.setDisplaySize(4163 * 2, 682 * 2);
 
     // Set collision by property
     this.groundLayer.setCollisionByProperty({
@@ -515,10 +517,24 @@ class GameScene extends Phaser.Scene {
   } 
 
   createHUD() {
-    const hud = this.add.bitmapText(5 * 8, 8, 'font', 'CANDY', 24);
+    const hud = this.add.text(20, 20, 'CANDIES', {
+      fontSize: 24,
+      fontWeight: 'bold',
+      stroke: '#000000',
+      strokeThickness: 3,
+      fill: '#fff',
+      active: true
+    });
     hud.setScrollFactor(0, 0);
     this.bullets = {
-      textObject: this.add.bitmapText(5 * 8, 8 + 30, 'font', '000000', 24)
+      textObject: this.add.text(20, 20 + 30, '000000', {
+        fontSize: 24,
+        fontWeight: 'bold',
+        stroke: '#000000',
+        strokeThickness: 3,
+        fill: '#fff',
+        active: true
+      })
     };
     this.bullets.textObject.setScrollFactor(0, 0);
   }
