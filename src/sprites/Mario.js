@@ -98,11 +98,13 @@ export default class Mario extends Phaser.GameObjects.Sprite {
 
     if (input.fire && this.fireCoolDown < 0) {
       const projectileOwner = socket.id;
+      const projectileOwnerName = this.scene.homeFightUser;
       socket.emit('sendProjectile', {
         x: this.x,
         y: this.y - 2,
         left: this.flipX,
-        projectileOwner
+        projectileOwner,
+        projectileOwnerName
       });
       this.fireCoolDown = 300;
     }
@@ -286,7 +288,7 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     this.body.setAcceleration(0);
     this.body.setVelocity(0, -300);
     this.alive = false;
-    this.scene.time.events.add(Phaser.Timer.SECOND * 5, respawn, this);
+    //this.scene.time.events.add(Phaser.Timer.SECOND * 5, respawn, this);
 
   }
 

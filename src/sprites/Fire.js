@@ -24,6 +24,7 @@ export default class Fire extends Phaser.GameObjects.Sprite {
         } */
     this.scene.physics.world.enable(this);
     this.owner;
+    this.ownerName;
     this.body.setSize(8, 8);
     this.body.offset.set(4, 0);
     // break;
@@ -45,6 +46,7 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     // this.scene.add.existing(this);
     this.body.allowGravity = true;
     this.owner = projectileRecieved.projectileOwner;
+    this.ownerName = projectileRecieved.projectileOwnerName;
     this.setPosition(projectileRecieved.x, projectileRecieved.y);
     this.body.velocity.x = 400 * (projectileRecieved.left ? -1 : 1);
     this.play('fireFly');
@@ -75,7 +77,9 @@ export default class Fire extends Phaser.GameObjects.Sprite {
           console.log('colision! ', fire, mario);
           socket.emit('hit', {
             source: fire.owner,
-            target: socket.id
+            sourceName: fire.ownerName,
+            target: socket.id,
+            targetName: mario.scene.homeFightUser
           });
           this.explode();
           mario.getHit();

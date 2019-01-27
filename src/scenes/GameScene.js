@@ -203,7 +203,7 @@ class GameScene extends Phaser.Scene {
 
     socket.on('hitConfirmed', hitInfo => {
       var timeOnScreen = 10000;
-      var eventText = hitInfo.source + ' pwneo a ' + hitInfo.target
+      var eventText = hitInfo.sourceName + ' pwneo a ' + hitInfo.targetName
       console.log(eventText, this.cameras);
       var style = { font: "16px Arial", fill: "#ff0044", align: "right", backgroundColor: "#ffcc99"};
       
@@ -229,7 +229,7 @@ class GameScene extends Phaser.Scene {
         }
       }
 
-      console.log(updatedScore);
+      console.log(playerInfo  + " was eliminated");
     });
 
 
