@@ -107,7 +107,7 @@ class GameScene extends Phaser.Scene {
       scene: this
     });
 
-    this.cameras.main.setZoom(0.6);
+    this.cameras.main.setZoom(0.5);
     this.createHUD();
     this.createHighscores();
 
@@ -145,18 +145,12 @@ class GameScene extends Phaser.Scene {
     });
 
     //adds player name
-    this.playerName = this.add.text(
+    this.playerName = this.add.bitmapText(
       this.player.x,
       this.player.y,
+      'font',
       this.homeFightUser,
-      {
-        fontSize: 48,
-        fontWeight: 'bold',
-        stroke: '#000000',
-        strokeThickness: 5,
-        fill: '#fff',
-        active: true
-      }
+      8
     );
 
     // Get players
@@ -181,9 +175,11 @@ class GameScene extends Phaser.Scene {
       if (this.players[id]) {
         this.players[id].move(player);
         this.players[id].playerName.x =
-          this.players[id].x - this.players[id].playerName.width / 2;
+          this.players[id].x +
+          this.players[id].width / 2 -
+          this.players[id].playerName.width / 2;
         this.players[id].playerName.y =
-          this.players[id].y - (this.players[id].height / 2);
+          this.players[id].y - this.players[id].height;
       }
     });
 
@@ -245,8 +241,13 @@ class GameScene extends Phaser.Scene {
         console.error('FAILED TO GET FIREBALL');
       }
     });
+<<<<<<< HEAD
+
+    socket.on('hitConfirmed', hitInfo => {
+=======
       
     socket.on('hitConfirmed', ({ hitInfo,bulletsDiff }) => {
+>>>>>>> origin/master
       var timeOnScreen = 3000;
       var eventText = hitInfo.sourceName + ' golpeo a ' + hitInfo.targetName + " por " + bulletsDiff + "!";
       if(this.players[hitInfo.target]){
@@ -345,8 +346,8 @@ class GameScene extends Phaser.Scene {
     this.player.update(this.keys, time, delta);
 
     this.playerName.x =
-      this.player.x - this.playerName.width / 2;
-    this.playerName.y = this.player.y - (this.player.height / 2);
+      this.player.x + this.player.width / 2 - this.playerName.width / 2;
+    this.playerName.y = this.player.y - this.player.height;
 
     // Run the update method of all enemies
     this.enemyGroup.children.entries.forEach(sprite => {
@@ -523,21 +524,21 @@ class GameScene extends Phaser.Scene {
   } 
 
   createHUD() {
-    const hud = this.add.text(-350, -180, 'CANDIES', {
-      fontSize: 64,
+    const hud = this.add.text(20, 20, 'CANDIES', {
+      fontSize: 24,
       fontWeight: 'bold',
       stroke: '#000000',
-      strokeThickness: 6,
+      strokeThickness: 3,
       fill: '#fff',
       active: true
     });
     hud.setScrollFactor(0, 0);
     this.bullets = {
-      textObject: this.add.text(-350, -180 + 70, '000000', {
-        fontSize: 64,
+      textObject: this.add.text(20, 20 + 30, '000000', {
+        fontSize: 24,
         fontWeight: 'bold',
         stroke: '#000000',
-        strokeThickness: 6,
+        strokeThickness: 3,
         fill: '#fff',
         active: true
       })
@@ -548,21 +549,14 @@ class GameScene extends Phaser.Scene {
   createHighscores() {
     this.highscores = [];
     this.highscoresTitle = this.add
-      .text(1100, -180, 'HIGHSCORES', {
-        fontSize: 64,
-        fontWeight: 'bold',
-        stroke: '#000000',
-        strokeThickness: 6,
-        fill: '#fff',
-        active: true
-      })
+      .bitmapText(900, 8 + 30, 'font', 'HIGHSCORES', 24)
       .setScrollFactor(0, 0);
 
     for (var i = 0; i < 10; i++) {
       this.highscores[i] = this.add
-        .text(800, -100 + 32 * i, '', {
+        .text(800, 80 + 24 * i, '', {
           fontFamily: 'Courier',
-          fontSize: 32,
+          fontSize: 20,
           color: '#00ff00',
           backgroundColor: '#0000007f'
         })
