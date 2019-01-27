@@ -240,9 +240,9 @@ class GameScene extends Phaser.Scene {
       }
     });
       
-    socket.on('hitConfirmed', hitInfo => {
+    socket.on('hitConfirmed', ({ hitInfo,bulletsDiff }) => {
       var timeOnScreen = 3000;
-      var eventText = hitInfo.sourceName + ' pwneo a ' + hitInfo.targetName;
+      var eventText = hitInfo.sourceName + ' golpeo a ' + hitInfo.targetName + " por " + bulletsDiff + "!";
       if(this.players[hitInfo.target]){
         this.players[hitInfo.target].getHurt();
       }
