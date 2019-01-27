@@ -3,6 +3,7 @@ import socket from '../helpers/socket';
 export default class Fire extends Phaser.GameObjects.Sprite {
   constructor(scene) {
     super(scene);
+    this.exploding = false;
     // super(config.scene, config.x, config.y, config.key);
 
     /* switch(config.type) {
@@ -13,7 +14,7 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     this.scene.physics.world.enable(this);
     this.owner;
     this.body.setSize(8, 8);
-    this.body.offset.set(12, 12);
+    this.body.offset.set(4, 0);
     // break;
 
     this.on(
@@ -22,6 +23,7 @@ export default class Fire extends Phaser.GameObjects.Sprite {
         if (this.anims.currentAnim.key === 'fireExplode') {
           this.setActive(false);
           this.setVisible(false);
+          this.exploding = false;
         }
       },
       this
@@ -47,19 +49,34 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     this.scene.physics.world.collide(this, this.scene.groundLayer, () =>
       this.collided()
     );
-    this.scene.physics.world.overlap(
-      this,
-      this.scene.mario,
-      (fire, mario) => {
-        //console.log("colision! ",fire, mario)
-        socket.emit('hit', {
+    if (!this.exploding) {
+      this.scene.physics.world.overlap(
+        this,
+        this.scene.mario,
+        (fire, mario) => {
+          if (socket.id === fire.owner) {
+            return;
+          }
+          console.log('colision! ', fire, mario);
+          socket.emit('hit', {
             source: fire.owner,
-            target: socket.id,
-            
+            target: socket.id
           });
-        mario.losePoints()
-      }
-    );
+          this.explode();
+          mario.losePoints();
+        }
+      );
+      this.scene.physics.world.overlap(
+        this,
+        this.scene.enemyPlayerGroup,
+        (fire, enemy) => {
+          if (fire.owner !== enemy.id) {
+            console.log('colision! ', fire, enemy);
+            this.explode();
+          }
+        }
+      );
+    }
   }
 
   collided() {
@@ -67,15 +84,16 @@ export default class Fire extends Phaser.GameObjects.Sprite {
       this.body.velocity.y = -150;
     }
     if (this.body.velocity.x === 0) {
-      this.scene.sound.playAudioSprite('sfx', 'smb_bump');
-
       this.explode();
     }
   }
 
   explode() {
+    this.exploding = true;
+    this.scene.sound.playAudioSprite('sfx', 'smb_bump');
     this.body.allowGravity = false;
     this.body.velocity.y = 0;
+    this.body.velocity.x = 0;
     this.play('fireExplode');
   }
 }
