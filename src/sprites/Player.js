@@ -37,6 +37,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.jumpTimer = 0;
     this.jumping = false;
     this.fireCoolDown = 0;
+    this.isHurt = false;
 
     this.on(
       'animationcomplete',
@@ -240,24 +241,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.body.setVelocityY(-150);
   }
 
-  hurtBy(enemy) {
-    if (!this.alive) {
-      return;
-    }
-    if (this.star.active) {
-      enemy.starKilled(enemy, this);
-    } else if (this.wasHurt < 1) {
-      if (this.animSuffix !== '') {
-        this.resize(false);
-        this.scene.sound.playAudioSprite('sfx', 'smb_pipe');
-
-        this.wasHurt = 2000;
-      } else {
-        this.die();
-      }
-    }
-  }
-
   resize(large) {
     this.scene.physics.world.pause();
     if (large) {
@@ -311,6 +294,33 @@ export default class Player extends Phaser.GameObjects.Sprite {
       );
     }
     setTimeout(this.scene.respawnPlayer, this.respawnCount * 1000, this);
+  }
+
+  getHurt(fireTouch) {
+    if(this.isHurt){ 
+      return
+    } else {
+      this.isHurt = true;
+      let finalAcelX = 0;
+      let finalAcelY = 0;
+      if(fireTouch.right) finalAcelX =200
+      if(fireTouch.left) finalAcelX =-200
+
+      this.body.setVelocityX(finalAcelX);
+      var tween = this.scene.tweens.add({ targets: this, alpha: 0, duration: 200, yoyo: true, loop:-1  },
+          1900,
+          'Linear',
+          true
+        );
+      setTimeout(this.finishHurting,2000, this, tween)
+    }    
+  }
+
+  finishHurting(player, tween){
+    console.log("invencibility has finished")
+    player.isHurt = false;
+    tween.stop();
+    player.alpha = 1;
   }
 
   respawnText(textString, index, scene) {

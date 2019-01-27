@@ -9,6 +9,7 @@ export default class EnemyPlayer extends Phaser.GameObjects.Sprite {
     config.scene.add.existing(this);
     this.alive = true;
     this.anim = 'standSuper';
+    this.isHurt = false;
 
     // config.scene.physics.world.enable(this);
     config.scene.add.existing(this);
@@ -54,5 +55,26 @@ export default class EnemyPlayer extends Phaser.GameObjects.Sprite {
     this.alive = false;
     this.scene.enemyPlayerGroup.remove(this);
     this.destroy();
+  }
+
+  getHurt() {
+    if(this.isHurt){ 
+      return
+    } else {
+      this.isHurt = true;
+      var tween = this.scene.tweens.add({ targets: this, alpha: 0, duration: 200, yoyo: true, loop:-1  },
+          1900,
+          'Linear',
+          true
+        );
+      setTimeout(this.finishHurting,2000, this, tween)
+    }    
+  }
+
+  finishHurting(player, tween){
+    console.log("invencibility has finished")
+    player.isHurt = false;
+    tween.stop();
+    player.alpha = 1;   
   }
 }
