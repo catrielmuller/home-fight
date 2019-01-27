@@ -96,7 +96,8 @@ export default class Player extends Phaser.GameObjects.Sprite {
       fire: keys.fire.isDown
     };
 
-    if (input.fire && this.fireCoolDown < 0) {
+    if (input.fire && this.fireCoolDown < 0 && this.scene.bullets >= 1) {
+      this.scene.bullets--;
       const projectileOwner = socket.id;
       const projectileOwnerName = this.scene.homeFightUser;
       socket.emit('sendProjectile', {

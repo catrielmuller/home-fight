@@ -127,6 +127,7 @@ class GameScene extends Phaser.Scene {
     this.physics.world.resume();
 
     // CREATE MARIO!!!
+    this.bullets = 0;
     this.player = new Player({
       scene: this,
       key: 'player',
@@ -170,6 +171,14 @@ class GameScene extends Phaser.Scene {
           this.players[id].playerName.width / 2;
         this.players[id].playerName.y =
           this.players[id].y - this.players[id].height;
+      }
+    });
+
+    socket.on('playerBullet', player => {
+      const { id, bullets } = player;
+      if (socket.id === id) {
+        this.bullets = bullets;
+        console.log('bullets', this.bullets);
       }
     });
 
@@ -257,9 +266,9 @@ class GameScene extends Phaser.Scene {
   }
 
   createEnemyPlayer(player) {
-    const { x, y, r, id, username } = player;
+    const { x, y, r, id, username, bullets } = player;
     if (socket.id === id) {
-      return;
+      this.bullets = bullets;
     }
     this.players[id] = new EnemyPlayer({
       id,
