@@ -261,7 +261,7 @@ class GameScene extends Phaser.Scene {
       }
       console.log(eventText, this.cameras);
       var style = {
-        font: '48px Arial',
+        font: '48px Verdana',
         fill: '#ff0044',
         align: 'right',
         backgroundColor: '#ffcc99'
@@ -269,7 +269,7 @@ class GameScene extends Phaser.Scene {
 
       var text = this.add
         .text(
-          eventText.length * 15,
+          eventText.length * 10,
           20 * this.tweens.getAllTweens().length,
           eventText,
           style
@@ -307,8 +307,10 @@ class GameScene extends Phaser.Scene {
       runChildUpdate: false // Due to https://github.com/photonstorm/phaser/issues/3724
     });
   }
+  
   createEnemyPlayer(player) {
     const { x, y, r, id, username, bullets } = player;
+    
     this.players[id] = new EnemyPlayer({
       bullets,
       id,
@@ -318,14 +320,20 @@ class GameScene extends Phaser.Scene {
       y,
       r
     });
-
+    
     //adds other players names
-    this.players[id].playerName = this.add.bitmapText(
+    this.players[id].playerName = this.add.text(
       x,
       y,
-      'font',
       username,
-      8
+      {
+        fontSize: 60,
+        fontWeight: 'bold',
+        stroke: '#000000',
+        strokeThickness: 5,
+        fill: '#fff',
+        active: true
+      }
     );
     this.enemyPlayerGroup.add(this.players[id]);
   }

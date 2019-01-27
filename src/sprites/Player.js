@@ -327,7 +327,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
   respawnText(textString, index, scene) {
     console.log(textString, index);
     var style = {
-      font: '20px Times New Roman',
+      font: '48px Verdana',
       fill: 'red',
       align: 'right',
       backgroundColor: '#ffcc99'
