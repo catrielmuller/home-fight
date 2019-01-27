@@ -107,6 +107,7 @@ class GameScene extends Phaser.Scene {
       scene: this
     });
 
+    this.cameras.main.setZoom(0.5);
     this.createHUD();
     this.createHighscores();
 
