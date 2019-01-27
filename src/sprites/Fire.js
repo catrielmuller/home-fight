@@ -1,9 +1,20 @@
 import socket from '../helpers/socket';
 
 export default class Fire extends Phaser.GameObjects.Sprite {
+  clean() {
+    console.log('init!');
+    this.setActive(true);
+    this.setVisible(true);
+    this.bounce = 0;
+    this.pickable = false;
+    this.exploding = false;
+    this.body.allowGravity = true;
+    this.body.velocity.y = 0;
+    this.body.velocity.x = 0;
+  }
+
   constructor(scene) {
     super(scene);
-    this.exploding = false;
     // super(config.scene, config.x, config.y, config.key);
 
     /* switch(config.type) {
@@ -23,7 +34,6 @@ export default class Fire extends Phaser.GameObjects.Sprite {
         if (this.anims.currentAnim.key === 'fireExplode') {
           this.setActive(false);
           this.setVisible(false);
-          this.exploding = false;
         }
       },
       this
@@ -31,8 +41,7 @@ export default class Fire extends Phaser.GameObjects.Sprite {
   }
 
   draw(projectileRecieved) {
-    this.setActive(true);
-    this.setVisible(true);
+    this.clean();
     // this.scene.add.existing(this);
     this.body.allowGravity = true;
     this.owner = projectileRecieved.projectileOwner;
@@ -55,8 +64,14 @@ export default class Fire extends Phaser.GameObjects.Sprite {
         this.scene.mario,
         (fire, mario) => {
           if (socket.id === fire.owner) {
+            if (this.bounce >= 1) {
+              this.pickup(socket.id);
+            }
             return;
+          } else if (this.pickable) {
+            this.pickup(socket.id);
           }
+
           console.log('colision! ', fire, mario);
           socket.emit('hit', {
             source: fire.owner,
@@ -66,34 +81,55 @@ export default class Fire extends Phaser.GameObjects.Sprite {
           mario.losePoints();
         }
       );
-      this.scene.physics.world.overlap(
-        this,
-        this.scene.enemyPlayerGroup,
-        (fire, enemy) => {
-          if (fire.owner !== enemy.id) {
-            console.log('colision! ', fire, enemy);
-            this.explode();
-          }
-        }
-      );
     }
+  }
+
+  pickup(player, broadcast = true) {
+    console.log('Picked up by', player);
+    this.setActive(false);
+    this.setVisible(false);
+    if (broadcast) {
+      socket.emit('fireballPickedUp', {
+        id: this.id,
+        player,
+        x: this.body.x,
+        y: this.body.y
+      });
+    }
+    delete this.scene.fireballs[this.id];
   }
 
   collided() {
-    if (this.body.velocity.y === 0) {
-      this.body.velocity.y = -150;
+    if (this.pickable) {
+      return;
     }
-    if (this.body.velocity.x === 0) {
-      this.explode();
+    if (this.body.velocity.y === 0) {
+      if (this.bounce < 3) {
+        this.bounce += 1;
+        this.body.velocity.y = -150 / this.bounce;
+        this.body.velocity.x /= 2;
+      } else {
+        this.pickable = true;
+        this.body.setAcceleration(0, 0);
+        this.body.setVelocity(0, 0);
+      }
     }
   }
 
-  explode() {
+  explode(broadcast = true) {
     this.exploding = true;
     this.scene.sound.playAudioSprite('sfx', 'smb_bump');
     this.body.allowGravity = false;
     this.body.velocity.y = 0;
     this.body.velocity.x = 0;
     this.play('fireExplode');
+    if (broadcast) {
+      socket.emit('fireballExploded', {
+        id: this.id,
+        x: this.body.x,
+        y: this.body.y
+      });
+    }
+    delete this.scene.fireballs[this.id];
   }
 }
