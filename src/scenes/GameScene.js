@@ -30,7 +30,6 @@ class GameScene extends Phaser.Scene {
   create() {
     // Running in 8-bit mode (16-bit mode is avaliable for the tiles, but I haven't done any work on sprites etc)
     this.eightBit = true;
-
     // Add and play the music
     this.music = this.sound.add('overworld');
     this.music.play({
@@ -184,15 +183,16 @@ class GameScene extends Phaser.Scene {
     });
 
     socket.on('hitConfirmed', hitInfo => {
-      console.log(hitInfo.source + ' pwneo a ' + hitInfo.target);
-      //TODO: avisar de alguna manera el cambio
-      //const scorecard = this.add.bitmapText(
-      //  this.mario.x,
-      //  this.mario.y,
-      //  'font',
-      //  hitInfo.source + " pwneo a " + hitInfo.target,
-      //  8
-      //);
+      var timeOnScreen = 5000;
+      var eventText = hitInfo.source + ' pwneo a ' + hitInfo.target
+      console.log(eventText, this.cameras);
+      var style = { font: "8px Arial", fill: "#ff0044", align: "right", backgroundColor: "#ffcc99"};
+      
+      var text = this.add.text(eventText.length*2, 10 * this.tweens.getAllTweens().length,eventText, style).setScrollFactor(0,0);      
+      
+      text.alpha = 1;
+      this.tweens.add({targets: text, alpha: 0 }, timeOnScreen, "Linear", true)
+      
     });
 
     socket.on('updateScore', updatedScore => {
