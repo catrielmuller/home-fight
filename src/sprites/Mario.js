@@ -12,6 +12,9 @@ export default class Mario extends Phaser.GameObjects.Sprite {
       this.collideWithMap.bind(this)
     );
 
+    //We start with 10 points
+    this.score = 10;
+
     this.acceleration = 600;
     this.body.maxVelocity.x = 200;
     this.body.maxVelocity.y = 500;
@@ -50,6 +53,7 @@ export default class Mario extends Phaser.GameObjects.Sprite {
     );
 
     this.animSuffix = 'Fire';
+    this.scene.updateScore(this.score)
     //this.scene.sound.playAudioSprite('sfx', 'smb_powerup');
   }
 
@@ -271,18 +275,41 @@ export default class Mario extends Phaser.GameObjects.Sprite {
   }
 
   die() {
+    this.scene.score = 0
+    this.score = 0;
     this.scene.music.pause();
     this.play('death');
     this.scene.sound.playAudioSprite('sfx', 'smb_mariodie');
     this.body.setAcceleration(0);
     this.body.setVelocity(0, -300);
     this.alive = false;
+    this.scene.time.events.add(Phaser.Timer.SECOND * 5, respawn, this);
+
   }
 
-  losePoints() {
-    this.scene.music.pause();
-    this.play('death');
-    this.scene.sound.playAudioSprite('sfx', 'smb_mariodie');
+  getHit() {
+      if(this.score <= 1){
+        socket.emit('playerDeath', {
+          player: this
+        });
+        this.die();
+      } else {
+        var scorelost = Math.round(this.score / 2); 
+        this.score = this.score - scorelost;
+        socket.emit('updatePlayerScore', {
+          player: this
+        });
+        this.losePoints(scorelost);
+      }
+  }
+
+  losePoints(pointsAmount){
+    this.scene.updateScore(- pointsAmount)
+
+  }
+  
+  respawn(){
+    //TODO: respawn
   }
 
   collideWithMap(sprite, tile) {

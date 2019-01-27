@@ -48,4 +48,12 @@ export default class EnemyPlayer extends Phaser.GameObjects.Sprite {
       this.anims.play(anim);
     }
   }
+
+  die() {
+    this.body.setAcceleration(0);
+    this.body.setVelocity(0, -300);
+    this.alive = false;
+
+  }
+
 }

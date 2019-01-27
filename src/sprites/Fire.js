@@ -63,7 +63,7 @@ export default class Fire extends Phaser.GameObjects.Sprite {
             target: socket.id
           });
           this.explode();
-          mario.losePoints();
+          mario.getHit();
         }
       );
       this.scene.physics.world.overlap(

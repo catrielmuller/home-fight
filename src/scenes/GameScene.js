@@ -183,12 +183,12 @@ class GameScene extends Phaser.Scene {
     });
 
     socket.on('hitConfirmed', hitInfo => {
-      var timeOnScreen = 5000;
+      var timeOnScreen = 10000;
       var eventText = hitInfo.source + ' pwneo a ' + hitInfo.target
       console.log(eventText, this.cameras);
-      var style = { font: "8px Arial", fill: "#ff0044", align: "right", backgroundColor: "#ffcc99"};
+      var style = { font: "16px Arial", fill: "#ff0044", align: "right", backgroundColor: "#ffcc99"};
       
-      var text = this.add.text(eventText.length*2, 10 * this.tweens.getAllTweens().length,eventText, style).setScrollFactor(0,0);      
+      var text = this.add.text(eventText.length*15, 20 * this.tweens.getAllTweens().length,eventText, style).setScrollFactor(0,0);      
       
       text.alpha = 1;
       this.tweens.add({targets: text, alpha: 0 }, timeOnScreen, "Linear", true)
@@ -418,8 +418,9 @@ class GameScene extends Phaser.Scene {
   createHUD() {
     const hud = this.add.bitmapText(5 * 8, 8, 'font', 'MARIO', 8);
     hud.setScrollFactor(0, 0);
+    const points = 0
     this.score = {
-      pts: 0,
+      pts: points,
       textObject: this.add.bitmapText(5 * 8, 16, 'font', '000000', 8)
     };
     this.score.textObject.setScrollFactor(0, 0);
