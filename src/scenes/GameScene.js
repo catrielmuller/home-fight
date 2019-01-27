@@ -320,12 +320,18 @@ class GameScene extends Phaser.Scene {
     });
 
     //adds other players names
-    this.players[id].playerName = this.add.bitmapText(
+    this.players[id].playerName = this.add.text(
       x,
       y,
-      'font',
       username,
-      8
+      {
+        fontSize: 60,
+        fontWeight: 'bold',
+        stroke: '#000000',
+        strokeThickness: 5,
+        fill: '#b49611',
+        active: true
+      }
     );
     this.enemyPlayerGroup.add(this.players[id]);
   }
