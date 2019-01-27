@@ -48,7 +48,7 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     this.owner = projectileRecieved.projectileOwner;
     this.ownerName = projectileRecieved.projectileOwnerName;
     this.setPosition(projectileRecieved.x, projectileRecieved.y);
-    this.body.velocity.x = 400 * (projectileRecieved.left ? -1 : 1);
+    this.body.velocity.x = 700 * (projectileRecieved.left ? -1 : 1);
     this.play('fireFly');
     this.scene.sound.playAudioSprite('sfx', 'smb_fireball');
   }
@@ -57,7 +57,9 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     this.clean();
     // this.scene.add.existing(this);
     this.body.allowGravity = true;
-    this.setPosition(projectileRecieved.x, projectileRecieved.y);
+    const { velX = 0, velY = 0 } = projectileRecieved;
+    this.body.reset(projectileRecieved.x, projectileRecieved.y);
+    this.body.setVelocity(velX, velY);
     this.play('fireFly');
     this.pickable = true;
   }
@@ -113,9 +115,6 @@ export default class Fire extends Phaser.GameObjects.Sprite {
   }
 
   collided() {
-    if (this.pickable) {
-      return;
-    }
     if (this.body.velocity.y === 0) {
       if (this.bounce < 3) {
         this.bounce += 1;

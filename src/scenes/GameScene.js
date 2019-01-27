@@ -229,6 +229,8 @@ class GameScene extends Phaser.Scene {
     socket.on('spawnBullet', spawnInfo => {
       //console.log("DIBUJAR BOLITA EN ",spawnInfo)
       let fireball = this.fireballs.get(this);
+      this.fireballs[spawnInfo.id] = fireball;
+      this.fireballs[spawnInfo.id].id = spawnInfo.id;
       if (fireball) {
         fireball.spawn(spawnInfo);
       } else {
