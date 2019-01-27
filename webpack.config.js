@@ -3,7 +3,7 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
-const config = require('./config.json');
+const config = require('./config.dev.json');
 
 // Phaser webpack config
 var phaserModule = path.join(__dirname, '/node_modules/phaser/');
