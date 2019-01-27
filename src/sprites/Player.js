@@ -14,7 +14,7 @@ export default class Player extends Phaser.GameObjects.Sprite {
 
     //We start with 10 points
     this.score = 10;
-
+    this.respawnCount = 5;
     this.acceleration = 600;
     this.body.maxVelocity.x = 200;
     this.body.maxVelocity.y = 500;
@@ -278,8 +278,6 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   die() {
-    this.scene.score = 0;
-    this.score = 0;
     this.scene.music.pause();
     this.play('death');
     socket.emit('playerDeath', {
@@ -292,9 +290,10 @@ export default class Player extends Phaser.GameObjects.Sprite {
     this.alive = false;
     // this.scene.enemyPlayerGroup.remove(this);
     this.scene.playerName.destroy();
+    this.respawn()
     this.destroy();
 
-    //this.scene.time.events.add(Phaser.Timer.SECOND * 5, respawn, this);
+    
   }
 
   getHit() {
@@ -315,8 +314,40 @@ export default class Player extends Phaser.GameObjects.Sprite {
   }
 
   respawn() {
-    //TODO: respawn
+    for (var i = 0; i < this.respawnCount; i++){
+      var count = this.respawnCount-i
+      setTimeout(this.respawnText, (i+1)*1000, "Empezando de nuevo en "+count+"...",i, this.scene);
+    }
+    setTimeout(this.scene.respawnPlayer, (this.respawnCount)*1000, this);
   }
+
+  respawnText(textString, index, scene){
+    console.log(textString, index)
+    var style = {
+      font: '20px Times New Roman',
+      fill: 'red',
+      align: 'right',
+      backgroundColor: '#ffcc99'
+    };
+
+    var text = scene.add.text(
+        500,
+        20 * index,
+        textString,
+        style
+      )
+      .setScrollFactor(0, 0);
+
+    text.alpha = 1;
+    scene.tweens.add(
+      { targets: text, alpha: 0, duration: 1000,
+      },
+      3000,
+      'Linear',
+      true
+    );
+  }
+
 
   collideWithMap(sprite, tile) {
     // Just run callbacks when hitting something from below or trying to enter it
