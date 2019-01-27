@@ -38,7 +38,6 @@ export default class Fire extends Phaser.GameObjects.Sprite {
       },
       this
     );
-    this.clean();
   }
 
   draw(projectileRecieved) {
@@ -82,23 +81,22 @@ export default class Fire extends Phaser.GameObjects.Sprite {
           mario.losePoints();
         }
       );
-      this.scene.physics.world.overlap(
-        this,
-        this.scene.enemyPlayerGroup,
-        (fire, enemy) => {
-          if (fire.owner !== enemy.id) {
-            console.log('colision! ', fire, enemy);
-            this.explode();
-          }
-        }
-      );
     }
   }
 
-  pickup(player) {
+  pickup(player, broadcast = true) {
     console.log('Picked up by', player);
     this.setActive(false);
     this.setVisible(false);
+    if (broadcast) {
+      socket.emit('fireballPickedUp', {
+        id: this.id,
+        player,
+        x: this.body.x,
+        y: this.body.y
+      });
+    }
+    delete this.scene.fireballs[this.id];
   }
 
   collided() {
@@ -118,12 +116,20 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     }
   }
 
-  explode() {
+  explode(broadcast = true) {
     this.exploding = true;
     this.scene.sound.playAudioSprite('sfx', 'smb_bump');
     this.body.allowGravity = false;
     this.body.velocity.y = 0;
     this.body.velocity.x = 0;
     this.play('fireExplode');
+    if (broadcast) {
+      socket.emit('fireballExploded', {
+        id: this.id,
+        x: this.body.x,
+        y: this.body.y
+      });
+    }
+    delete this.scene.fireballs[this.id];
   }
 }

@@ -180,13 +180,21 @@ class GameScene extends Phaser.Scene {
       let fireball = this.mario.scene.fireballs.get(this);
       if (fireball) {
         this.fireballs[projectileRecieved.id] = fireball;
+        this.fireballs[projectileRecieved.id].id = projectileRecieved.id; 
         fireball.draw(projectileRecieved);
       }
     });
 
-    socket.on('fireballRemoved', ({ id, type }) => {
+    socket.on('fireballExploded', ({ id, x, y }) => {
       if (this.fireballs[id]) {
-        this.fireballs[id].fireballRemove({ id, type });
+        this.fireballs[id].body.reset(x, y);
+        this.fireballs[id].explode(false);
+      }
+    });
+    socket.on('fireballPickedUp', ({ id, player, x, y}) => {
+      if (this.fireballs[id]) {
+        this.fireballs[id].body.reset(x, y);
+        this.fireballs[id].pickup(player, false);
       }
     });
 
