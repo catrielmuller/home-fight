@@ -225,7 +225,17 @@ class GameScene extends Phaser.Scene {
         this.fireballs[id].pickup(player, false);
       }
     });
-
+    
+    socket.on('spawnBullet', spawnInfo => {
+      //console.log("DIBUJAR BOLITA EN ",spawnInfo)
+      let fireball = this.fireballs.get(this);
+      if (fireball) {
+        fireball.draw(spawnInfo);
+      } else {
+        console.error('FAILED TO GET FIREBALL');
+      }
+    });
+      
     socket.on('hitConfirmed', hitInfo => {
       var timeOnScreen = 3000;
       var eventText = hitInfo.sourceName + ' pwneo a ' + hitInfo.targetName;

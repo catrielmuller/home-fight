@@ -53,6 +53,15 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     this.scene.sound.playAudioSprite('sfx', 'smb_fireball');
   }
 
+  spawn(projectileRecieved) {
+    this.clean();
+    // this.scene.add.existing(this);
+    this.body.allowGravity = true;
+    this.setPosition(projectileRecieved.x, projectileRecieved.y);
+    this.body.velocity.x = 0;
+    this.body.velocity.y = 0;
+  }
+
   update(time, delta) {
     if (!this.active) {
       return;
