@@ -48,7 +48,7 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     this.owner = projectileRecieved.projectileOwner;
     this.ownerName = projectileRecieved.projectileOwnerName;
     this.setPosition(projectileRecieved.x, projectileRecieved.y);
-    this.body.velocity.x = 700 * (projectileRecieved.left ? -1 : 1);
+    this.body.velocity.x = 1700 * (projectileRecieved.left ? -1 : 1);
     this.play('fireFly');
     this.scene.sound.playAudioSprite('sfx', 'smb_fireball');
   }
@@ -88,17 +88,17 @@ export default class Fire extends Phaser.GameObjects.Sprite {
 
           console.log('colision! ', fire, player);
           //Check for Inv.Frames on the player after geting hit.
-          if(!player.isHurt){
+          if (!player.isHurt) {
             socket.emit('hit', {
               source: fire.owner,
               sourceName: fire.ownerName,
               target: socket.id,
               targetName: player.scene.homeFightUser
             });
-            console.log("I got hurt", player, fire)
+            console.log('I got hurt', player, fire);
             this.scene.player.getHurt(fire.body.touching);
           }
-          
+
           this.explode();
         }
       );
@@ -124,7 +124,7 @@ export default class Fire extends Phaser.GameObjects.Sprite {
     if (this.body.velocity.y === 0) {
       if (this.bounce < 3) {
         this.bounce += 1;
-        this.body.velocity.y = -150 / this.bounce;
+        this.body.velocity.y = -450 / this.bounce;
         this.body.velocity.x /= 2;
       } else {
         this.pickable = true;
