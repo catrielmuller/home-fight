@@ -12,12 +12,12 @@ class BootScene extends Phaser.Scene {
     // Register a load progress event to show a load bar
     this.load.on('progress', value => {
       progress.clear();
-      progress.fillStyle(0x00ffff, 1);
+      progress.fillStyle(0xffffff, 1);
       progress.fillRect(
         0,
-        this.sys.game.config.height / 2,
+        0,
         this.sys.game.config.width * value,
-        60
+        30
       );
     });
 
@@ -30,6 +30,9 @@ class BootScene extends Phaser.Scene {
     });
 
     this.load.image('background', 'assets/images/background.png');
+    this.load.image('home', 'assets/images/home.png');
+    this.load.image('credits', 'assets/images/credits.png');
+
 
     // Tilemap with a lot of objects and tile-properties tricks
     this.load.tilemapTiledJSON('map', 'assets/tilemaps/home-fight-home.json');

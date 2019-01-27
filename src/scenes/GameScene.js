@@ -600,7 +600,7 @@ class GameScene extends Phaser.Scene {
   }
   respawnPlayer(player) {
     player.destroy();
-    location.reload(true);
+    this.scene.start('CreditScene');
   }
 
   cleanUp() {

@@ -5,6 +5,8 @@ class SelectScene extends Phaser.Scene {
     });
   }
   preload() {
+    this.home = this.add.tileSprite(640, 360, 1280, 720, 'home');
+
     this.selectText = this.add.bitmapText(
       10,
       600,
@@ -66,6 +68,7 @@ class SelectScene extends Phaser.Scene {
     this.inputText.x = Math.floor(640 - (this.inputText.width / 2));
     this.selectText.x = Math.floor(640 - (this.selectText.width / 2));
   }
+
 }
 
 export default SelectScene;

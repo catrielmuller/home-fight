@@ -2,6 +2,7 @@ import 'phaser';
 import BootScene from './scenes/BootScene';
 import GameScene from './scenes/GameScene';
 import SelectScene from './scenes/SelectScene';
+import CreditScene from './scenes/CreditScene';
 
 const config = {
   type: Phaser.WEBGL,
@@ -23,7 +24,7 @@ const config = {
   },
   plugins: {
   },
-  scene: [BootScene, SelectScene, GameScene]
+  scene: [BootScene, SelectScene, GameScene, CreditScene]
 };
 
 const game = new Phaser.Game(config); // eslint-disable-line no-unused-vars
