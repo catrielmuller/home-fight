@@ -241,8 +241,13 @@ class GameScene extends Phaser.Scene {
         console.error('FAILED TO GET FIREBALL');
       }
     });
+<<<<<<< HEAD
+
+    socket.on('hitConfirmed', hitInfo => {
+=======
       
     socket.on('hitConfirmed', ({ hitInfo,bulletsDiff }) => {
+>>>>>>> origin/master
       var timeOnScreen = 3000;
       var eventText = hitInfo.sourceName + ' golpeo a ' + hitInfo.targetName + " por " + bulletsDiff + "!";
       if(this.players[hitInfo.target]){
