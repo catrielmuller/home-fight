@@ -28,7 +28,7 @@ class GameScene extends Phaser.Scene {
   }
 
   create() {
-    // Running in 8-bit mode (16-bit mode is avaliable for the tiles, but I haven't done any work on sprites etc)
+    this.homeFightUser = localStorage.getItem('home-fight-user');
     this.eightBit = true;
     // Add and play the music
     this.music = this.sound.add('overworld');
@@ -141,9 +141,10 @@ class GameScene extends Phaser.Scene {
       this.mario.x,
       this.mario.y,
       'font',
-      socket.id,
+      this.homeFightUser,
       8
     );
+
     // Get players
     this.players = {};
     socket.on('currentPlayers', players => {
@@ -164,11 +165,13 @@ class GameScene extends Phaser.Scene {
       const { id, x, y, r } = player;
       if (this.players[id]) {
         this.players[id].move(player);
-        this.players[id].playerName.setPosition(x, y, 1);
+        this.players[id].playerName.x =
+          (this.players[id].x + (this.players[id].width / 2))  - ( this.players[id].playerName.width / 2);
+        this.players[id].playerName.y = this.players[id].y - this.players[id].height;
       }
     });
 
-    socket.emit('getPlayers');
+    socket.emit('initPlayer', {username: this.homeFightUser});
 
     // The camera should follow Mario
     this.cameras.main.startFollow(this.mario);
@@ -210,7 +213,7 @@ class GameScene extends Phaser.Scene {
   }
 
   createEnemyPlayer(player) {
-    const { x, y, r, id } = player;
+    const { x, y, r, id, username } = player;
     if (socket.id === id) {
       return;
     }
@@ -223,7 +226,7 @@ class GameScene extends Phaser.Scene {
     });
 
     //adds other players names
-    this.players[id].playerName = this.add.bitmapText(x, y, 'font', id, 8);
+    this.players[id].playerName = this.add.bitmapText(x, y, 'font', username, 8);
     this.enemyPlayerGroup.add(this.players[id]);
   }
 
@@ -247,7 +250,9 @@ class GameScene extends Phaser.Scene {
 
     // Run the update method of Mario
     this.mario.update(this.keys, time, delta);
-    this.playerName.setPosition(this.mario.x, this.mario.y, 1);
+
+    this.playerName.x = (this.mario.x + (this.mario.width / 2))  - ( this.playerName.width / 2);
+    this.playerName.y = this.mario.y - this.mario.height;
 
     // Run the update method of all enemies
     this.enemyGroup.children.entries.forEach(sprite => {
